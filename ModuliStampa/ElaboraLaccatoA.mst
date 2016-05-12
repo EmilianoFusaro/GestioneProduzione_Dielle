@@ -1,0 +1,79 @@
+<SQL>
+ " Select Qta,Pcod,Pdes,PL,PA,PP,PV1,PV2,PV3,PV4,Numero from TempSlip where carico like '#{carico}' and ISLACCATO=1 order by Numero,Codice "
+</SQL>
+ 
+ <DIVIDI>
+ numero
+ </DIVIDI>
+ 
+<TESTA>
+  TESTO (2,1,6,N) "#{ENV['USERNAME']} #{Time.now.day}/#{Time.now.month}/#{Time.now.year} #{Time.now.hour}:#{Time.now.min}"
+  TESTO (2,3,9,G) "Commessa Laccatura Nr. #{carico}"
+  TESTO (250,3,7,C) "ElaboraLaccatiA.mst"
+  TESTO (3,8,12,G) "Qta"
+  TESTO (12,8,12,G) "Cod"
+  TESTO (32,8,12,G) "Descrizione"
+  TESTO (162,8,12,G) "L"
+  TESTO (174,8,12,G) "A"
+  TESTO (186,8,12,G) "P"
+  TESTO (198,8,8,G) "CHK"
+  //Testata Principale     (X,Y,  DimX , DimY)
+  //qta  
+  RETTANGOLO (1,4,10,5) 
+  //codice
+  RETTANGOLO (11,4,20,5) 
+  //descrizione
+  RETTANGOLO (31,4,130,5) 
+  //diml  
+  RETTANGOLO (161,4,12,5) 
+  //dima
+  RETTANGOLO (173,4,12,5)
+  //dimp
+  RETTANGOLO (185,4,12,5) 
+  //ccheck
+  RETTANGOLO (197,4,8,5)
+  ##TESTO (190,18,8,N) "ordine: #{rigax[:numero] if defined? rigax}" 
+  TESTO (160,3,9,G) "Ordine: #{rigax[:numero]}" 
+</TESTA>
+
+
+<RECORD>  
+  //Rettangolo Principlae
+  //qta  
+  RETTANGOLO (1,9,10,10)              
+  //cod
+  RETTANGOLO (11,9,20,10)
+  //Descrizione
+  RETTANGOLO (31,9,130,10)            
+  //diml
+  RETTANGOLO (161,9,12,10)          
+  //dima
+  RETTANGOLO (173,9,12,10) 
+  //dimp
+  RETTANGOLO (185,9,12,10) 
+  //ccheck
+  RETTANGOLO (197,9,8,10) 
+  RETTANGOLO (199,12,3,3) 
+
+  TESTO (5,15,11,G) "#{rigax[:qta].to_i}"
+  ///TESTO (5,18,7,N)  "#{rigax[:fm]}"
+  TESTO (12,14,9,G) "#{rigax[:pcod]}"
+  TESTO (32,14,8,N) "#{rigax[:pdes]}"
+  TESTO (32,18,7,N) "#{rigax[:pv1]}, #{rigax[:pv2]}, #{rigax[:pv3]}, #{rigax[:pv4]} "
+  TESTO (163,14,9,N) "#{rigax[:pl].to_i}"
+  TESTO (175,14,9,N) "#{rigax[:pa].to_i}"
+  TESTO (186,14,9,N) "#{rigax[:pp].to_i}"
+</RECORD>
+
+
+
+
+
+
+
+
+
+
+
+
+

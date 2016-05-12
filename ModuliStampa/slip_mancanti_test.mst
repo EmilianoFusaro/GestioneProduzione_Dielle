@@ -1,0 +1,72 @@
+#nota qui uso riga[:nomecampo] perchè il risultato è dato da una query non da una tabella mappata
+
+{RECORD}
+ //dimensioni boxcontenitore L H , dimensioni img interna al contenitore L H, posizione x , y  
+ ##IMMAGINE (110,110,105,105,88,7) "k:/evento/dielle/foto/flavio/#{riga[:numero]}.jpg"
+ ##IMMAGINE (110,110,105,105,88,7) "//SRV-CAD/SLIP_GIF/#{riga[:codart]}.jpg" (File::exists?("//SRV-CAD/SLIP_GIF/#{riga[:codart]}.jpg"))==true
+ 
+
+ RETTANGOLO (1,5,140,115)
+  
+ LINEA (1,15,71,15)
+ LINEA (1,80,71,80)
+ LINEA (71,5,71,97)
+ LINEA (21,5,21,15)
+ LINEA (51,5,51,15)
+  
+ TESTO (2,4,6,N) "#{ENV['USERNAME']} #{Time.now.day}/#{Time.now.month}/#{Time.now.year} #{Time.now.hour}:#{Time.now.min}"
+ TESTO (2,8,6,N) "CARICO"
+ TESTO (22,8,6,N) "NR.ORDINE-NR.COLLO"
+ TESTO (52,8,6) "MATRICOLA"
+  
+ TESTO (2,13,14,G) "#{riga[:commessa]}"
+ TESTO (22,13,14,G) "#{riga[:numero]}-#{riga[:eti]}"
+ TESTO (52,13,14,G) "#{riga[:matricola]}"
+
+ LINEA (71,68,141,68,F,T)
+ 
+ #descizioni note 
+ TESTO (73,54,9,G) "#{riga[:note1]} #{riga[:note2]} "
+ TESTO (73,59,9,G) "#{riga[:note3]} #{riga[:note4]} #{riga[:note5]}"
+  
+ LINEA (1,48,141,48,F,T)
+
+ LINEA (1,68,71,68,F,T)
+ LINEA (1,72,71,72,F,T)
+ LINEA (1,76,71,76,F,T)
+ LINEA (36,68,36,80,F,T)
+
+ LINEA (1,36,71,36,F,T)
+ LINEA (1,40,71,40,F,T)
+ LINEA (1,44,71,44,F,T)
+ LINEA (36,36,36,48,F,T)
+
+
+ LINEA (21,15,21,20,F,T)
+ LINEA (21,48,21,53,F,T)
+ LINEA (1,20,71,20,F,T)
+ LINEA (1,53,71,53,F,T)
+
+ #varianti padri mancanti   
+ TESTO (2,71,9,N) "#{TraduciVarianti(riga[:var].split(";")[0])}"
+ TESTO (37,71,9,N) "#{TraduciVarianti(riga[:var].split(";")[1])}"
+ TESTO (2,75,9,N) "#{TraduciVarianti(riga[:var].split(";")[2])}"
+ TESTO (2,79,9,N) "#{TraduciVarianti(riga[:var].split(";")[3])}"
+ TESTO (37,79,9,N) "#{TraduciVarianti(riga[:var].split(";")[4])}"
+  
+ 
+ TESTO (22,19,11,G) "NESSUNA DISTINTA"
+  
+  
+ TESTO (2,52,9) "#{riga[:codart]}"
+ TXTBOXED (2,54,200,40,8,N) "#{riga[:des]}"
+ 
+ TESTO (22,52,11,G) "DIM:#{riga[:diml].to_i}x#{riga[:dima].to_i}x#{riga[:dimp].to_i}"
+ 
+ 
+  
+ ###BARCODE39 (5,81,250,40) "#{riga.barcode}"
+ #BARCODE39 (2,81,190,40) "#{riga.barcode}"
+
+{/RECORD}
+

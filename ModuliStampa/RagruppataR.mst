@@ -1,0 +1,133 @@
+<SQL>
+ " SELECT OrdineStampa.Reparto, Reparti.Descrizione as Rdescrizione,  TempSlip.Carico ,count(TempSlip.Qta) as Qta, TempSlip.Codice,
+ TempSlip.Descrizione,TempSlip.Desc2, TempSlip.Pdes,TempSlip.PL,TempSlip.Pa,TempSlip.PP, TempSlip.v1,TempSlip.v2,TempSlip.pv1,TempSlip.v2 ,
+ TempSlip.#{fase.next},TempSlip.D#{fase.next} as drdestinazione,TempSlip.FM,TempSlip.Nota1,TempSlip.Nota2,TempSlip.Nota3,TempSlip.Nota4,TempSlip.Nota5, TempSlip.Scarico,TempSlip.Numero 
+ FROM OrdineStampa INNER JOIN Reparti ON OrdineStampa.Reparto = Reparti.Codice INNER JOIN TempSlip ON Reparti.Codice = TempSlip.#{fase} where Tempslip.Carico='#{carico}'
+ and OrdineStampa.Reparto='#{reparto}' And Tempslip.IsLaccato=#{$laccato}
+ group by OrdineStampa.Reparto, Reparti.Descrizione ,  TempSlip.Carico , TempSlip.Codice,
+ TempSlip.Descrizione,TempSlip.Desc2,TempSlip.Qta, TempSlip.Pdes,TempSlip.PL,TempSlip.Pa,TempSlip.PP, TempSlip.v1,TempSlip.v2,TempSlip.pv1,TempSlip.v2 ,
+ TempSlip.#{fase.next},TempSlip.D#{fase.next},TempSlip.FM ,TempSlip.Nota1,TempSlip.Nota2,TempSlip.Nota3,TempSlip.Nota4,TempSlip.Nota5  ,TempSlip.Scarico,TempSlip.Numero "
+ </SQL>
+ 
+
+ 
+<TESTA>
+  TESTO (2,3,9,G) "Reparto #{reparto} #{nomestampa}"
+  TESTO (195,3,9,G) "Stampa del Carico #{carico}"
+  TESTO (240,3,7,C) "RagruppataR.mst #{ENV['USERNAME']} #{Time.now.strftime('%d-%m-%Y %H:%M:%S')}"
+  TESTO (3,8,8,C) "Qta"
+  TESTO (15,8,8,C) "Descrizione"
+  TESTO (115,8,8,C) "L"
+  TESTO (125,8,8,C) "A"
+  TESTO (135,8,8,C) "P"
+  TESTO (148,8,8,C) "Colore"
+  TESTO (198,8,8,C) "Descrizione Varianti"
+  TESTO (248,8,8,C) "Reparto Destinazione"
+  //Testata Principale     (X,Y,  DimX , DimY)
+  //codice  
+  RETTANGOLO (1,4,10,5) 
+  //descrizione
+  RETTANGOLO (11,4,101,5) 
+  //diml  
+  RETTANGOLO (112,4,10,5) 
+  //dimla  
+  RETTANGOLO (122,4,10,5) 
+  //dimlp
+  RETTANGOLO (132,4,10,5) 
+  RETTANGOLO (142,4,50,5) 
+  //colore
+  RETTANGOLO (192,4,50,5) 
+  //descrizione varianti 
+  RETTANGOLO (242,4,52,5)          
+  //reparto destinazione   
+  RETTANGOLO (1,10,293,190)   
+</TESTA>
+
+
+<RECORD>  
+  //Rettangolo Principlae
+  //codice  
+  RETTANGOLO (1,10,10,10)              
+  //descrizione
+  RETTANGOLO (11,10,101,10)          
+  //diml
+  RETTANGOLO (112,10,10,10)          
+  //dima
+  RETTANGOLO (122,10,10,10) 
+  //dimp
+  RETTANGOLO (132,10,10,10) 
+  //colore
+  RETTANGOLO (142,10,50,10) 
+  RETTANGOLO (192,10,50,10) 
+  //descrizione varianti   
+  RETTANGOLO (242,10,52,10) 
+  //reparto destinazione 
+  TESTO (5,14,11,G) "#{rigax[:qta]}"
+  TESTO (5,18,7,N)  "#{rigax[:fm]}"
+  ///TESTO (12,14,9,G) "#{rigax[:codice]}"
+  TESTO (12,14,8,N) "#{rigax[:descrizione]} #{rigax[:desc2]}"
+  TESTO (12,18,7,N) "#{rigax[:pdes]}"
+  TESTO (114,14,9,N) "#{rigax[:pl].to_i}"
+  TESTO (124,14,9,N) "#{rigax[:pa].to_i}"
+  TESTO (134,14,9,N) "#{rigax[:pp].to_i}"
+  TESTO (143,14,8,N) "#{rigax[:v1].to_s.upcase.split("=")[1]}"
+  TESTO (143,18,8,N) "#{rigax[:v2].to_s.upcase.split("=")[1]}"
+  TESTO (193,14,6,F)  "#{rigax[:nota1]}#{rigax[:nota2]}"
+  TESTO (193,18,6,F) "#{rigax[:nota3]}#{rigax[:nota4]}#{rigax[:nota5]}"
+  TESTO (244,14,8,N) "#{rigax[:drdestinazione]}"
+  ///TESTO (244,18,8,N) " scarico: #{rigax[:scarico].to_i}"
+  ///TESTO (265,18,8,N) "oridine: #{rigax[:numero]}"
+</RECORD>
+
+
+<RECORDGRANDE>  
+  //Rettangolo Principlae
+  //codice  
+  RETTANGOLO (1,10,10,20)              
+  //descrizione
+  RETTANGOLO (11,10,101,20)          
+  //diml
+  RETTANGOLO (112,10,10,20)          
+  //dima
+  RETTANGOLO (122,10,10,20) 
+  //dimp
+  RETTANGOLO (132,10,10,20) 
+  //colore
+  RETTANGOLO (142,10,50,20) 
+  RETTANGOLO (192,10,50,20) 
+  //descrizione varianti   
+  RETTANGOLO (242,10,52,20) 
+  //reparto destinazione 
+  TESTO (5,14,11,G) "#{rigax[:qta]}"
+  TESTO (5,18,7,N)  "#{rigax[:fm]}"
+  ///TESTO (12,14,9,G) "#{rigax[:codice]}"
+  ///TESTO (12,14,8,N) "#{rigax[:descrizione]} #{rigax[:desc2]}"
+  ///TESTO (12,18,7,N) "#{rigax[:pdes]}"
+  TESTO (12,14,8,G) "#{rigax[:descrizione]}#{rigax[:desc2]}"[0,60]
+  TESTO (12,18,8,G) "#{rigax[:descrizione]}#{rigax[:desc2]}"[60,60]
+  TESTO (12,22,7,N) "#{rigax[:pdes]}"[0,60]
+  TESTO (12,26,7,N) "#{rigax[:pdes]}"[60,60]
+  TESTO (114,14,9,N) "#{rigax[:pl].to_i}"
+  TESTO (124,14,9,N) "#{rigax[:pa].to_i}"
+  TESTO (134,14,9,N) "#{rigax[:pp].to_i}"
+  TESTO (143,14,8,N) "#{rigax[:v1].to_s.upcase.split("=")[1]}"
+  TESTO (143,18,8,N) "#{rigax[:v2].to_s.upcase.split("=")[1]}"
+  TESTO (193,14,6,F)  "#{rigax[:nota1]}#{rigax[:nota2]}"
+  TESTO (193,18,6,F) "#{rigax[:nota3]}#{rigax[:nota4]}#{rigax[:nota5]}"
+  TESTO (244,14,8,N) "#{rigax[:drdestinazione]}"
+  ///TESTO (244,18,8,N) " scarico: #{rigax[:scarico].to_i}"
+  ///TESTO (265,18,8,N) "oridine: #{rigax[:numero]}"
+</RECORDGRANDE>
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,91 @@
+<SQL>
+" Select count(Qta) as qta,Numero,Pcod,Pdes,PL,PA,PP,dbo.ESTRAI(PV2,'=',2) as PV2 from TempSlip where carico like '#{carico}' and ISLACCATO=1 group by qta,Numero,Pcod,Pdes,PL,PA,PP,dbo.ESTRAI(PV2,'=',2)  order by pv2,pcod,numero "
+</SQL>
+
+#" Select count(Qta) as qta,Numero,Pcod,Pdes,PL,PA,PP,PV2 from TempSlip where carico like '#{carico}' and ISLACCATO=1 group by qta,Numero,Pcod,Pdes,PL,PA,PP,PV2  order by pv2,pcod,numero "  
+ 
+ <DIVIDI>
+ PV2
+ </DIVIDI>
+ 
+<TESTA>
+  TESTO (2,3,9,G) "Commessa Laccatura Nr. #{carico}"
+  TESTO (250,3,7,C) "Stampa_Laccati_X_Variante.mst"
+  TESTO (3,8,12,G) "Tot"
+  TESTO (13,8,12,G) "Qta"
+  TESTO (23,8,12,G) "Ord."
+  TESTO (35,8,12,G) "Cod"
+  TESTO (53,8,12,G) "Descrizione"
+  TESTO (162,8,12,G) "L"
+  TESTO (174,8,12,G) "A"
+  TESTO (186,8,12,G) "P"
+  TESTO (198,8,8,G) "CHK"
+  //Testata Principale     (X,Y,  DimX , DimY)
+  //TOT  
+  RETTANGOLO (1,4,10,5)
+  //qta  
+  RETTANGOLO (11,4,10,5) 
+  //ordine
+  RETTANGOLO (21,4,13,5) 
+  //codice
+  RETTANGOLO (34,4,18,5) 
+  //descrizione
+  RETTANGOLO (52,4,109,5) 
+  //diml  
+  RETTANGOLO (161,4,12,5) 
+  //dima
+  RETTANGOLO (173,4,12,5)
+  //dimp
+  RETTANGOLO (185,4,12,5) 
+  //ccheck
+  RETTANGOLO (197,4,8,5)
+  ##TESTO (190,18,8,N) "ordine: #{rigax[:numero] if defined? rigax}" 
+  TESTO (130,3,9,G) "Prelievo Per Colore: #{rigax[:pv2]}" 
+</TESTA>
+
+
+<RECORD>  
+  //Rettangolo Principlae
+  //tot  
+  #RETTANGOLO (1,9,10,8)
+  //qta  
+  RETTANGOLO (11,9,10,8)              
+  //ordine
+  RETTANGOLO (21,9,13,8)
+  //codice
+  RETTANGOLO (34,9,18,8)
+  //Descrizione
+  RETTANGOLO (52,9,109,8)            
+  //diml
+  RETTANGOLO (161,9,12,8)          
+  //dima
+  RETTANGOLO (173,9,12,8) 
+  //dimp
+  RETTANGOLO (185,9,12,8) 
+  //ccheck
+  RETTANGOLO (197,9,8,8) 
+  RETTANGOLO (199,12,3,3) 
+
+  #TESTO (5,15,11,G) "#{tot_cod}"
+  TESTO (15,15,11,G) "#{rigax[:qta].to_i}"
+  TESTO (22,14,9,G) "#{rigax[:numero]}"
+  TESTO (35,14,9,G) "#{rigax[:pcod]}"
+  TESTO (53,14,8,N) "#{rigax[:pdes]}"
+  ##TESTO (32,18,7,N) "#{rigax[:pv1]}, #{rigax[:pv2]}, #{rigax[:pv3]}, #{rigax[:pv4]} "
+  TESTO (163,14,9,N) "#{rigax[:pl].to_i}"
+  TESTO (175,14,9,N) "#{rigax[:pa].to_i}"
+  TESTO (186,14,9,N) "#{rigax[:pp].to_i}"
+</RECORD>
+
+
+
+
+
+
+
+
+
+
+
+
+

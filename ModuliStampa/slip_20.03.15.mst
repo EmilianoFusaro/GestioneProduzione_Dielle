@@ -1,0 +1,161 @@
+{INFO}
+  ORIENTAMENTO (ORIZZONTALE)
+  TABELLA (SLIP)
+  ORDINA(C1,C2,C3,C4,C5)
+  GRUPPOXY (0,292,147,0,200,100)
+  DRAWORDER (XY)
+{/INFO}
+
+{LAYOUT}
+  
+
+{/LAYOUT}
+
+{RECORD}
+ //dimensioni boxcontenitore L H , dimensioni img interna al contenitore L H, posizione x , y  
+ IMMAGINE (110,110,105,105,88,7) "k:/evento/dielle/foto/flavio/#{riga.numero}.jpg" ((File::exists?("k:/evento/dielle/foto/flavio/#{riga.numero}.jpg"))==true and (riga.percorso=="DIELLE"))
+ IMMAGINE (110,110,105,105,88,7) "//SRV-CAD/SLIP_GIF/#{riga.pcod}.jpg" ((File::exists?("//SRV-CAD/SLIP_GIF/#{riga.pcod}.jpg"))==true and (riga.percorso=="DIELLE"))
+ ## riga.eti.to_s.rjust(4,"0")  formatta il numero con 4 "0" Es:0001
+ 
+ ##ATTENZIONE QUESTE 2 RIGHE NON FANNO STAMPARE CARICHI 3CAD (COMMENTARE O SOSTITUIRE)
+ IMMAGINE (110,110,105,105,88,7) "K:/eCadPro/_ecadpro/EtiBox/#{riga.numero}_#{riga.eti.to_s.rjust(4,"0")}.jpg" (riga.percorso=="DIELLEEV")
+ IMMAGINE (110,110,105,105,88,7) "//SRV-CAD/SLIP_GIF/#{riga.pcod}.jpg" (File::exists?("//SRV-CAD/SLIP_GIF/#{riga.pcod}.jpg"))==true and (riga.percorso=="DIELLEEV")
+ 
+ TESTO (74,47,8,G) "#{riga.tipoelaborazione} #{riga.script}"
+ ##TESTO (73,47,8,G) "#{riga.script}"
+
+ LINEA (0,0,147,0)      #verticale sinistra
+ LINEA (0,0,0,80)       #orizzontale superiore  
+ LINEA (147,0,147,68)   #verticale destra   
+ LINEA (0,101,147,101)  #orizzontale inferiore
+  
+ LINEA (0,10,73,10)     #2 orizzontale 
+ LINEA (0,80,73,80)     # orizzontale prima di barcode
+ LINEA (73,0,73,80)
+ LINEA (20,0,20,15)     #verticale tra codice figlio e descrizione
+ LINEA (50,0,50,10)
+  
+ #ENV['USERNAME'] Utente Windows
+ #ENV['USER'] Utente Unix
+
+ //TESTO (2,4,6,N) "#{ENV['USERNAME']} #{Time.now.day}/#{Time.now.month}/#{Time.now.year} #{Time.now.hour}:#{Time.now.min}"
+ TESTO (74,2,6,N) "#{ENV['USERNAME']} #{Time.now.strftime('%d-%m-%Y %H:%M:%S')}"
+ TESTO (1,3,6,N) "CARICO"
+ TESTO (21,3,6,N) "NR.ORDINE-NR.COLLO"
+ TESTO (51,3,6) "MATRICOLA #{riga.ciclo}"
+  
+ TESTO (1,8,16,G) "#{riga.carico}"
+ TESTO (21,8,16,G) "#{riga.numero}-#{riga.eti}"
+ TESTO (51,8,16,G) "#{riga.matricola}"
+
+ LINEA (0,15,73,15,F,T)          #orizzontale sinistra figlio - descrizione figlio
+ LINEA (73,68,147,68,F,T)   #destra sopra descrizione fasi
+  
+ #TESTO (73,54,9,G) "#{riga.nota1}" #non utiliazzata
+ #TESTO (73,59,9,G) "#{riga.nota2}" #non utilizzata
+  
+ #linee tra padre e figlio
+ LINEA (0,45,73,45,F,T)       #orizzontale sinistra tra figlio e padre
+ LINEA (73,48,147,48,F,T)     #orizzontale destra sotto img  
+
+ #linee orizzontali x Figlio
+ LINEA (0,68,73,68,F,T)  #orizzontale
+ LINEA (0,72,73,72,F,T)  #orizzontale
+ LINEA (0,76,73,76,F,T)  #orizzontale
+ ##LINEA (36,68,36,80,F,T)  #verticale varianti padre
+
+#linee orizzontali x Padre
+ LINEA (0,33,73,33,F,T)  #orizzontale
+ LINEA (0,37,73,37,F,T)  #orizzontale
+ LINEA (0,41,73,41,F,T)  #orizzontale
+
+ LINEA (21,41,21,45,F,T)         #verticale divide codice padre - descrizione padre sotto
+
+  
+ ####CONDIZIONATESTO (73,72,9) "#{riga.dc1}" $ (riga.c1!="1503" and riga.c1!="1580")
+ ####CONDIZIONATESTO (73,77,9) "#{riga.dc2}" $ (riga.c2!="1503" and riga.c2!="1580")
+ ####CONDIZIONATESTO (73,82,9) "#{riga.dc3}" $ (riga.c3!="1503" and riga.c3!="1580")
+ ####CONDIZIONATESTO (73,87,9) "#{riga.dc4}" $ (riga.c4!="1503" and riga.c4!="1580")
+ ####CONDIZIONATESTO (73,92,9) "#{riga.dc5}" $ (riga.c5!="1503" and riga.c5!="1580")
+ ####CONDIZIONATESTO (73,96,9) "#{riga.dc6}" $ (riga.c6!="1503" and riga.c6!="1580")
+
+ TESTO (74,72,10) "#{riga.dc1}"
+ TESTO (74,77,10) "#{riga.dc2}"
+ TESTO (74,82,10) "#{riga.dc3}"
+ TESTO (74,87,10) "#{riga.dc4}"
+ TESTO (74,92,10) "#{riga.dc5}"
+ TESTO (74,96,10) "#{riga.dc6}"
+ 
+ #Varianti Padre Sotto
+ TESTO (0,71,10,N) "#{riga.pv1.to_s.upcase.split("=")[1]}" 
+ TESTO (36,71,10,G) "#{riga.pv2.to_s.upcase.split("=")[1]}"
+ TESTO (0,75.5,10,G) "#{riga.pv3.to_s.upcase.split("=")[1]}"
+ TESTO (0,79,10,G) "#{riga.pv4.to_s.upcase.split("=")[1]}"
+ TESTO (36,79,10,G) "#{riga.pv5.to_s.upcase.split("=")[1]} #{riga.fm}"
+ 
+ #Varianti Figlio Sopra
+ TESTO (0,36,10,N) "#{riga.v1.to_s.upcase.split("=")[1]}"
+ TESTO (36,36,10,G) "#{riga.v2.to_s.upcase.split("=")[1]}"
+ TESTO (1,40,10,G) "#{riga.v3.to_s.upcase.split("=")[1]}"
+ TESTO (36,40,10,G) "#{riga.v4.to_s.upcase.split("=")[1]}"
+ ##TESTO (2,41,9,N) "#{riga.v5}"  Al Momento Nascosta
+ ##TESTO (37,41,9,N) "#{riga.v6} #{riga.fm}"
+ TESTO (36,44,10,G) "#{riga.v6.to_s.upcase.split("=")[1]}"
+  
+  
+ TESTO (1,13.5,10) "#{riga.codice}" 
+ #descrizione figlio  ATTENZIONE !! alla fine è impostato un massimo di 145 caratteri oltre va in crash e non disegna più slip
+ TXTBOXED (0.3,16,210,50,11,N) "#{riga.descrizione}#{riga.desc2}"[0,133]
+ ##{DESC3}"
+ 
+ 
+ //TESTO (22,19,11,G) "DIM:#{riga.rl.to_i}x#{riga.ra.to_i}x#{riga.rp.to_i} QTA:#{riga.qta.to_i}"
+ ##righe dimensioni figlio
+ CONDIZIONATESTO (21,14,12,G) "DIM:#{riga.rl.to_i}x#{riga.ra.to_i}x#{riga.rp.to_i} #{"QTA:" + riga.qta.to_i.to_s + "MT" if (riga.qta.to_i > 1 and riga.descrizione.include? "MQ") }" $ riga.tipoelaborazione=="Logy"
+ CONDIZIONATESTO (21,14,12,G) "DIM:#{riga.rl.to_i}x#{riga.ra.to_i}x#{riga.rp.to_i} #{"QTA:" + riga.qta.to_i.to_s if (riga.qta.to_i > 1 and not riga.descrizione.include? "MQ") }" $ riga.tipoelaborazione=="Logy"
+ CONDIZIONATESTO (21,14,12,G) "PRELEVA:#{riga.rl.to_i}x#{riga.ra.to_i}x#{riga.rp.to_i} #{"QTA:" + riga.qta.to_i.to_s + "MT" if (riga.qta.to_i > 1 and riga.descrizione.include? "MQ") }" $ riga.tipoelaborazione=="Union"
+ CONDIZIONATESTO (21,14,12,G) "PRELEVA:#{riga.rl.to_i}x#{riga.ra.to_i}x#{riga.rp.to_i} #{"QTA:" + riga.qta.to_i.to_s if (riga.qta.to_i > 1 and not riga.descrizione.include? "MQ") }" $ riga.tipoelaborazione=="Union"
+
+ //TESTO (22,19,11,G) "DIM:#{riga.rl.to_i}x#{riga.ra.to_i}x#{riga.rp.to_i} #{"QTA:" + riga.qta.to_i.to_s + "MT" if (riga.qta.to_i > 1 and riga.descrizione.include? "MQ") }"
+ //TESTO (22,19,11,G) "DIM:#{riga.rl.to_i}x#{riga.ra.to_i}x#{riga.rp.to_i} #{"QTA:" + riga.qta.to_i.to_s if (riga.qta.to_i > 1 and not riga.descrizione.include? "MQ") }"
+ 
+ 
+ 
+ #codice padre
+ TESTO (1,44.5,11) "#{riga.pcod}"
+ #descrizione padre  ATTENZIONE !! alla fine è impostato un massimo di 187 caratteri oltre va in crash e non disegna più slip
+ TXTBOXED (0.3,46,210,70,11,N) "#{riga.pdes} #{riga.nota1.gsub('_','')} #{riga.nota2.gsub('_','')} #{riga.nota3.gsub('_','')} #{riga.nota4.gsub('_','')} #{riga.nota5.gsub('_','')}"[0,170]
+ "#{DESC2}#{DESC3}"
+ 
+ //TESTO (22,52,11,G) "DIM:#{riga.pl.to_i}x#{riga.pa.to_i}x#{riga.pp.to_i} QTA:#{riga.qta.to_i}"
+ #righe dimensioni padre
+ TESTO (22,44.5,12,G) "DIM:#{riga.pl.to_i}x#{riga.pa.to_i}x#{riga.pp.to_i} #{"QTA:" + riga.qta.to_i.to_s + "MT" if (riga.qta.to_i > 1 and riga.descrizione.include? "MQ") }"
+ TESTO (22,44.5,12,G) "DIM:#{riga.pl.to_i}x#{riga.pa.to_i}x#{riga.pp.to_i} #{"QTA:" + riga.qta.to_i.to_s if (riga.qta.to_i > 1 and not riga.descrizione.include? "MQ") }"
+ 
+ 
+  
+ ###BARCODE39 (5,81,250,40) "#{riga.barcode}"
+ #originale
+ ###BARCODE39 (2,81,190,40) "#{riga.barcode}" 
+ ####BARCODE39 (1,81,198,41) "#{riga.barcode}"  ULTIMO UTILIZZATO
+ BARCODE39 (2,81,198,41) "#{riga.barcode}"
+ ####prima non testato BARCODE39 (80,49,250,20) "#{riga.pxlavdx.gsub('P_','')}"  riga.pxlavdx.to_s.include? 'P_'
+ ####prima non testato BARCODE39 (80,58,250,20) "#{riga.pxlavsx.gsub('P_','')}" riga.pxlavsx.to_s.include? 'P_'
+ BARCODE39 (75,49,200,20) "#{riga.pxlavdx.gsub('P_','')}"  riga.pxlavdx.to_s.include? 'P_'
+ BARCODE39 (75,58,200,20) "#{riga.pxlavsx.gsub('P_','')}" riga.pxlavsx.to_s.include? 'P_'
+
+
+{/RECORD}
+
+{MODIFICA_ETI}
+#TESTO (1,68,9,V)  <PV1>
+#TESTO (37,68,9,V) <PV2>
+#TESTO (1,72,9,V)  <PV3>
+//TESTO (37,72,9,V) <PV4>
+#TESTO (1,76,10,V) <PV4>
+#TESTO (37,76,9,V) <PV5>
+//TESTO (37,76,9,V) <PV6>
+{/MODIFICA_ETI}
+
+
+

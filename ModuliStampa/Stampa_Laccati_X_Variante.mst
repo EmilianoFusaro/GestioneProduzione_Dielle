@@ -1,0 +1,96 @@
+<SQL>
+" Select count(Qta) as qta,Numero,Pcod,Pdes,PL,PA,PP,dbo.ESTRAI(PV2,'=',2) as PV2 from TempSlip where carico like '#{carico}' and ISLACCATO=1 group by qta,Numero,Pcod,Pdes,PL,PA,PP,dbo.ESTRAI(PV2,'=',2)  order by pv2,pcod,numero "
+</SQL>
+
+#" Select count(Qta) as qta,Numero,Pcod,Pdes,PL,PA,PP,PV2 from TempSlip where carico like '#{carico}' and ISLACCATO=1 group by qta,Numero,Pcod,Pdes,PL,PA,PP,PV2  order by pv2,pcod,numero "  
+ 
+ <DIVIDI>
+ PV2
+ </DIVIDI>
+ 
+<TESTA>
+  //TESTO (2,1,6,N) "#{ENV['USERNAME']} #{Time.now.day}/#{Time.now.month}/#{Time.now.year} #{Time.now.hour}:#{Time.now.min}"
+  TESTO (2,5,13,G) "Commessa Laccatura Nr. #{carico}"
+  TESTO (250,3,7,C) "Stampa_Laccati_X_Variante.mst"
+  TESTO (3,23,12,G) "Tot"
+  TESTO (13,23,12,G) "Qta"
+  TESTO (23,23,12,G) "Ord."
+  TESTO (35,23,12,G) "Cod"
+  TESTO (53,23,12,G) "Descrizione"
+  TESTO (162,23,12,G) "L"
+  TESTO (174,23,12,G) "A"
+  TESTO (186,23,12,G) "P"
+  TESTO (198,23,8,G) "CHK"
+  //RIQUADRO TESTATA
+  RETTANGOLO (1,8,204,11)
+  TESTO (3,12,12,G) "DATA CONSEGNA MATERIALE                               DATA CONSEGNA MATERIALE"
+  TESTO (3,17,12,G) "IN VERNICIATURA                       ___/___/______   LACCATO IN DIELLE                     ___/___/______"
+  //Testata Principale     (X,Y,  DimX , DimY)
+  //TOT  
+  RETTANGOLO (1,19,10,5)
+  //qta  
+  RETTANGOLO (11,19,10,5) 
+  //ordine
+  RETTANGOLO (21,19,13,5) 
+  //codice
+  RETTANGOLO (34,19,18,5) 
+  //descrizione
+  RETTANGOLO (52,19,109,5) 
+  //diml  
+  RETTANGOLO (161,19,12,5) 
+  //dima
+  RETTANGOLO (173,19,12,5)
+  //dimp
+  RETTANGOLO (185,19,12,5) 
+  //ccheck
+  RETTANGOLO (197,19,8,5)
+  ##TESTO (190,18,8,N) "ordine: #{rigax[:numero] if defined? rigax}" 
+  TESTO (105,5,13,G) "Prelievo Per Colore: #{rigax[:pv2]}" 
+</TESTA>
+
+
+<RECORD>  
+  //Rettangolo Principlae
+  //tot  
+  #RETTANGOLO (1,9,10,8)
+  //qta  
+  RETTANGOLO (11,24,10,8)              
+  //ordine
+  RETTANGOLO (21,24,13,8)
+  //codice
+  RETTANGOLO (34,24,18,8)
+  //Descrizione
+  RETTANGOLO (52,24,109,8)            
+  //diml
+  RETTANGOLO (161,24,12,8)          
+  //dima
+  RETTANGOLO (173,24,12,8) 
+  //dimp
+  RETTANGOLO (185,24,12,8) 
+  //ccheck
+  RETTANGOLO (197,24,8,8) 
+  RETTANGOLO (199,27,3,3) 
+
+  #TESTO (5,15,11,G) "#{tot_cod}"
+  TESTO (15,30,11,G) "#{rigax[:qta].to_i}"
+  TESTO (22,30,9,G) "#{rigax[:numero]}"
+  TESTO (35,30,9,G) "#{rigax[:pcod]}"
+  TESTO (53,30,8,N) "#{rigax[:pdes]}"
+  ##TESTO (32,18,7,N) "#{rigax[:pv1]}, #{rigax[:pv2]}, #{rigax[:pv3]}, #{rigax[:pv4]} "
+  TESTO (163,30,9,N) "#{rigax[:pl].to_i}"
+  TESTO (175,30,9,N) "#{rigax[:pa].to_i}"
+  TESTO (186,30,9,N) "#{rigax[:pp].to_i}"
+</RECORD>
+
+
+
+
+
+
+
+
+
+
+
+
+

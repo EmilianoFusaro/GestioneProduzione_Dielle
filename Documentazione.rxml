@@ -1,0 +1,773 @@
+#Crea Una Nuova Applicazione
+rails new sample_app 
+
+#Installa Le Gemme Saltando Quelle Relative Alla Produzione
+bundle install --without production
+
+#Aggiorna Le Gemme
+bundle update 
+
+#Genera Un Controller StaticPages Con 2 Action home & help (Con Relativi File)
+rails generate controller StaticPages home help
+
+#Elimina Il Controller Creato Precedentemente Con I Relativi File
+rails destroy controller StaticPages home help
+
+#Genera Un Model
+rails generate model User name:string email:string
+
+#Elimina Il Model Precedente
+rails destroy model User
+
+#Genero La Migrazione
+rake db:migrate
+
+#Annullo La Migrazione Allo Step Prededente
+rake db:rollback
+
+#Vado Indietro Sino All'Inizio Della Migrazione
+db:migrate VERSION=0
+
+
+#GET (leggi,richiedi dati), POST (crea dati), PATCH (aggiorna dati),  DELETE (elimina dati)
+
+Controller Test
+Model Test
+Integration Test #(simulano un utente che usa l'applicazione)
+
+rake test #esegue tutti i test
+
+#metodi e procedure da utilizzare in tutta l'applicazione vengono creati gli helper nel file
+app/helpers/application_helper.rb
+
+#Creazione Integration Test
+rails generate integration_test site_layout
+
+#Eseguire Integration Test
+rake test:integration
+
+#Creazione Controller User
+rails generate controller Users new                           #nei controller Users Plurale
+
+#Creazione Model User 
+rails generate model User name:string email:string            #nei model User Singolare
+
+#Esegue La Migration
+rake db:migrate
+
+#Annulla La Migration
+rake db:rollback
+
+#Avvo della console
+rails console
+
+#Avvio della console senza apportare modifche (le annulla all'uscita)
+rails console --sandbox
+
+#Creazione di un nuovo utente
+User.new
+
+#Creazione di un nuovo utente con passaggio di hash
+user = User.new(name: "Michael Hartl", email: "mhartl@example.com")
+
+#Restituisce la validità del modello
+user.valid?
+
+#Salva l'utente
+user.save
+
+#Creazione e Salvataggio utente in un unico passaggio
+User.create(name: "A Nother", email: "another@example.org")
+
+#Creazione e Salvataggio utente in un unico passaggio utilizzando variabile di appoggio
+foo = User.create(name: "Foo", email: "foo@bar.com")
+
+#Eliminazione Utente (anche se foo rimane il suo valore in memoria)
+foo.destroy
+
+#Recupera un utente in funzione dell'indice (se non lo trova ritorna errore)
+User.find(1)
+
+#Per cercare senza far ritornare errore usare
+User.find_by(email: "mhartl@example.com")
+
+#Primo - Ultimo - Tutti
+User.first User.last User.all
+
+#Ripristinare un valore prima di salvarlo sul database
+user.email
+user.email = "foo@bar.com"
+user.reload.email #(ritorna il valore di prima)
+
+#Aggiornare attributi multipli (restituisce true o false)
+user.update_attributes(name: "The Dude", email: "dude@abides.org")
+
+#Aggiornare un singolo valore
+user.update_attribute(name: "The Dude") 
+
+#Eseguire il test solo dei Model
+rake test:models
+
+#Attiva modalità sandbox che non salva i dati e verifica validità modello
+rails console --sandbox
+user = User.new(name: "", email: "mhartl@example.com")
+user.valid?
+
+#Restituisce messaggio di errore validazione
+user.errors.full_messages
+
+
+#Test Validità Stessa Email
+rails console --sandbox
+user = User.create(name: "Example User", email: "user@example.com")
+user.email.upcase #Restituisce "USER@EXAMPLE.COM"
+duplicate_user = user.dup
+duplicate_user.email = user.email.upcase
+duplicate_user.valid?  #Restituisce True
+
+#Aggiungere indici a livello di database
+rails generate migration add_index_to_users_email
+class AddIndexToUsersEmail < ActiveRecord::Migration
+  def change
+    add_index :users, :email, unique: true  #email diventa unica in qunto è un index
+  end
+end
+
+#Aggiunge il campo password_digest che serve per far funzionare il metodo "has_secure_password" in User
+rails generate migration add_password_digest_to_users password_digest:string
+class AddPasswordDigestToUsers < ActiveRecord::Migration
+  def change
+    add_column :users, :password_digest, :string  #aggiunge a users il campo passord_digest
+  end
+end
+
+#Creazione Utente Valido
+rails console
+User.create(name: "Michael Hartl", email: "mhartl@example.com", password: "foobar", password_confirmation: "foobar")
+
+#Trovo L'utente appena registrato
+user = User.find_by(email: "mhartl@example.com")
+user.password_digest #restituisce => "$2a$10$YmQTuuDNOszvu5yi7auOC.F4G//FGhyQSWCpghqRWQWITUYlG3XVy" (la password è sicura)
+
+#Rimuovere il database in caso di problemi
+rm -f development.sqlite3
+
+#has_secure_password crea un metodo authenticate che dando in input una password ritorna l'oggetto utente se la password è giusta
+
+user.authenticate("password sbagliata") #=> ritorna false
+user.authenticate("foobar") #=> ritorna oggetto user
+!!user.authenticate("foobar") #=> True
+
+#restituisce la variabile params se sono in ambiente si sviluppo
+#<%= debug(params) if Rails.env.development? %>
+
+rails console #ambiente development di default
+Rails.env  #carica ambiente di sviluppo
+Rails.env.development? #=>True
+Rails.env.test?        #=>False
+rails console test     
+Rails.env              #=>Test
+rails server --environment production
+rake db:migrate RAILS_ENV=production    #genera migrazione in ambiente di produzione
+
+#Aggiunta in route.rb di una risorsa (vegono aggiunte quattro azioni corrispondenti alle quattro operazioni fondamentali POST, GET, PATCH e DELETE)
+resources :users
+
+#esempio applico MD5 hash su una mail
+email = "MHARTL@example.COM"
+Digest::MD5::hexdigest(email.downcase) => "1fda4469bcbec3badf5418269ffc5968"
+
+
+#Creazione di un User Helper
+app/helpers/users_helper.rb
+module UsersHelper
+  # Returns the Gravatar for the given user.
+  def gravatar_for(user)
+    gravatar_id = Digest::MD5::hexdigest(user.email.downcase)
+    gravatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}"
+    image_tag(gravatar_url, alt: user.name, class: "gravatar")
+  end
+end
+
+#Aggiornamento Record Esistente
+rails console
+user = User.first
+user.update_attributes(name: "Example User", email: "example@railstutorial.org", password: "foobar" , password_confirmation: "foobar")
+
+#Resettare il database
+db:migrate:reset
+
+#Aggiunge Un Text Helper alla console
+rails console
+include ActionView::Helpers::TextHelper
+pluralize(1, "error")
+
+
+#Creazione integration test per testare i form
+rails generate integration_test users_signup
+
+
+assert_no_difference 'User.count' do
+  post users_path, user: { name: "", email: "user@invalid", password: "foo", password_confirmation: "bar" }
+end
+
+rails console
+before_count = User.count
+post users_path, ...
+after_count = User.count
+assert_equal before_count, after_count
+
+#Generazione messaggio flash da console
+rails console
+flash = { success: "It worked!", danger: "It failed." }  #=> {:success=>"It worked!", danger: "It failed."}
+flash.each do |key, value|
+  puts "#{key}"
+  puts "#{value}"
+end
+
+#=>
+#success
+#It worked!
+#danger
+#It failed
+
+
+#in produzione bisogna usare SSL vedere spiegazione su come implementarlo 
+#inoltre per funzionare su heroku bisogna cambiare il webserver con unicor installare le gemma e vedere come fare
+gem 'unicorn', '4.8.3' #pag.390 libro
+
+#Creazione di un Session controller per gestire login-logout
+#il form di login gestito da una richiesta "GET" e un action "new"
+#il login invio di richiesta "POST" e action "create"
+#il logout invio di richiesta "DELETE" e action "destroy"
+rails generate controller Sessions new
+
+#definisco nel file route solo le azioni indicate non l'intera risorsa
+Rails.application.routes.draw do
+  root   'static_pages#home'
+  get    'login'   => 'sessions#new'
+  post   'login'   => 'sessions#create'
+  delete 'logout'  => 'sessions#destroy'
+  get    'help'    => 'static_pages#help'
+  get    'about'   => 'static_pages#about'
+  get    'contact' => 'static_pages#contact'  
+  get    'signup'  => 'users#new'
+  resources :users
+  #nuove:
+  get    'login'   => 'sessions#new' 
+  post   'login'   => 'sessions#create'
+  delete 'logout'  => 'sessions#destroy'
+end
+
+#Analizziamo tutte 
+rake routes
+ Prefix Verb      URI Pattern                Controller/Action
+ root GET         /                          'static_pages#home'
+ help GET         /help(.:format)            'static_pages#help'
+ about GET        /about(.:format)           'static_pages#about'
+ contact GET      /contact(.:format)         'static_pages#contact'
+ signup GET       /signup(.:format)          'users#new'
+ login GET        /login(.:format)           'sessions#new'
+ POST             /login(.:format)           'sessions#create'
+ logout DELETE    /logout(.:format)          'sessions#destroy'
+ users GET        /users(.:format)           'users#index'
+ POST             /users(.:format)           'users#create'
+ new_user GET     /users/new(.:format)       'users#new'
+ edit_user GET    /users/:id/edit(.:format)  'users#edit'
+ user GET         /users/:id(.:format)       'users#show'
+ PATCH            /users/:id(.:format)       'users#update'
+ PUT              /users/:id(.:format)       'users#update'
+ DELETE           /users/:id(.:format)       'users#destroy'
+
+
+ #Differenze tra form che ha un model è form che non ha model
+ form_for(@user) #Rails deduce tutto POST a URL/users
+
+ form_for(:session, url: login_path) #dobbiamo indicare il nome della risorsae l’URL corrispondente 
+
+#sarebbe da usare form_tag ma l'autore preferisce usare form_for
+
+
+#Creazione integration test x il Login
+rails generate integration_test users_login
+
+#Esegue un integration test specifico
+rake test TEST=test/integration/users_login_test.rb
+
+#pag.pdf 425 pag.libro 417  (8.2 Effettuare il login)
+
+
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
+
+#-------------------------------------------------------------------------Esempi Con I File
+#modifica la data del file o lo crea vuoto ne non eiste
+touch app/views/static_pages/about.html.erb
+
+#modifica il nome di un file
+mv app/views/layouts/application.html.erb layout_file
+
+#rimuove un file
+rm example_user.rb
+
+#scaricare un file
+curl -O http://rubyonrails.org/images/rails.png
+
+#sposta il file in un percorso
+mv rails.png app/assets/images/
+
+#crea una directory
+mkdir app/views/shared
+
+#-------------------------------------------------------------------------Esempio Hash
+user = { "first_name" => "Michael", "last_name" => "Hartl" }
+user = { :name => "Michael Hartl", :email => "michael@example.com" }
+user = { name: "Michael Hartl", email: "michael@example.com" }
+
+
+
+
+#-------------------------------------------------------------------------Esempio Classe Statica
+
+class Foo
+  def self.bar
+    puts 'class method'
+  end
+
+  def baz
+    puts 'instance method'
+  end
+end
+
+
+#se la uso così
+Foo.bar -> OK
+Foo.baz -> ERRORE
+
+#se la uso così
+a = Foo.new
+a.bar -> ERRORE
+a.baz -> OK
+
+Foo.bar # => "class method"
+Foo.baz # => NoMethodError: undefined method ‘baz’ for Foo:Class
+Foo.new.baz # => instance method
+Foo.new.bar # => NoMethodError: undefined method ‘bar
+
+
+#-------------------------------------------------------------------------Esempio Metodi Aggiunti Solo In Rails
+>> "".blank?
+=> true
+>> " ".empty?
+=> false
+>> " ".blank?
+=> true
+>> nil.blank?
+=> true
+
+
+#-------------------------------------------------------------------------Classe User
+
+class User
+  attr_accessor :name, :email      #variabili di istanza sono nil di default 
+  def initialize(attributes = {})  #posso passare un HASH in qualsiasi formato esempio: name: "Michael Hartl", email: "michael@example.com"
+    @name = attributes[:name]
+    @email = attributes[:email]
+  end
+  def formatted_email
+    "#{@name} <#{@email}>"
+  end
+end
+
+a = User.new()
+a = User.new(name: "Michael Hartl", email: "michael@example.com")
+puts a.name
+
+
+#-------------------------------------------------------------------------Esempio Getter & Setter
+class Human
+  def noise=(noise)    #Setter 
+    @noise = noise
+  end
+  def noise            #Getter
+    @noise
+  end
+end
+
+
+#-------------------------------------------------------------------------Esempio Route
+
+root_path -> '/'
+root_url -> 'http://www.example.com/'  #solo x reindirizzamenti
+
+#rinomino
+get 'static_pages/help'
+#in
+get 'help' => 'static_pages#help'
+#facendo così posso usare
+help_path -> '/help'
+help_url -> 'http://www.example.com/help'
+
+
+get 'signup' => 'users#new' #posso usare un nome diverso signup che punta al route effettivo
+
+
+#-------------------------------------------------------------------------Esempio Classe Di Migration
+class CreateUsers < ActiveRecord::Migration
+  def change
+    create_table :users do |t|
+      t.string :name
+      t.string :email
+      t.timestamps null: false
+    end
+  end
+end
+
+
+#------------------------------------------------------------------------Esempio Test Con Setup
+test/models/user_test.rb
+require 'test_helper'
+class UserTest < ActiveSupport::TestCase
+
+  def setup  #---eseguito prima di ogni test
+    #@user = User.new(name: "Example User", email: "user@example.com")
+    @user = User.new(name: "Example User", email: "user@example.com", password: "foobar", password_confirmation: "foobar")
+  end
+
+  test "should be valid" do
+    assert @user.valid?
+  end
+
+
+  test "name should be present" do
+    @user.name = " "
+    assert_not @user.valid?  #restituisce true le la condizione è false (assert=si verifica che .... assert_not = non si verifica che)
+  end
+
+
+  test "email should be present" do
+    @user.email = " "
+    assert_not @user.valid?
+  end
+
+  test "name should not be too long" do
+    @user.name = "a" * 51
+    assert_not @user.valid?
+  end
+
+  test "email should not be too long" do
+    @user.email = "a" * 244 + "@example.com"
+    assert_not @user.valid?
+  end
+
+  test "email addresses should be unique" do
+    duplicate_user = @user.dup
+    duplicate_user.email = @user.email.upcase
+    @user.save
+    assert_not duplicate_user.valid?  
+  end
+
+  test "password should have a minimum length" do
+    @user.password = @user.password_confirmation = "a" * 5
+    assert_not @user.valid?
+  end
+
+end
+
+
+
+#-------------------------------------------------------------------------Esempio validazione user
+
+class User < ActiveRecord::Base
+  #corrisponde a =>
+  #           #questi sono hash 
+  #validates(:name, presence: true)
+
+  before_save { self.email = email.downcase }
+
+  validates :name, presence: true, length: { maximum: 50 }
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i  #/\A iniziale e +\z/i  finale devono essere eliminati sul generatore web Rubular
+  #validates :email, presence: true, length: { maximum: 255 } , format: { with: VALID_EMAIL_REGEX } , uniqueness: true
+  validates :email, presence: true, length: { maximum: 255 } , format: { with: VALID_EMAIL_REGEX } , uniqueness: { case_sensitive: false }
+
+  #per usare aggiungere anche gem 'bcrypt', '3.1.7'
+  has_secure_password #abilita tutto per gestire una password sicura (per far funzinare tutto dobbiamo aggiungere al Model il campo password_digest)
+
+  validates :password, length: { minimum: 6 } #questo è un metodo virtuale
+
+end
+
+
+
+#-------------------------------------------------------------------------Esempio File Fixture che popla 
+test/fixtures/users.yml
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/
+# FixtureSet.html
+
+one:
+  name: MyString
+  email: MyString
+
+two:
+  name: MyString
+  email: MyString
+
+
+#-------------------------------------------------------------------------Controller User
+class UsersController < ApplicationController
+  
+  def show
+    @user = User.find(params[:id])
+    debugger #va in debug sulla console CTRL+D per continuare l'esecuzione Attenzione necessita della "byebug gem"
+  end
+
+  def new
+    @user = User.new
+  end
+
+  def create
+    #@user = User.new(params[:user]) #corrisponde a passare @user = User.new(name: "Foo Bar", email: "foo@invalid", password: "foo", password_confirmation: "bar")
+    @user = User.new(user_params)
+    if @user.save
+      flash[:success] = "Welcome to the Sample App!" #uso hash flash per generare un messaggio positivo 
+      redirect_to @user #dopo il salvataggio devo rendirizzare una vista per non generare errore
+      #corrisponde a redirect_to user_url(@user)
+    else
+      render 'new'
+    end
+  end
+
+  private
+    def user_params
+      params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    end
+
+end
+
+#per far funzionare il post bisogna filtrare i parametri che si ricevono dalla view
+params.require(:user).permit(:name, :email, :password, :password_confirmation)
+@user = User.new(user_params)
+
+
+#------------------------------------------------------------------------Esempio  app/views/users/new.html.erb (ogni riga è tra <%=  e %>)
+ form_for(@user) do |f| 
+   render 'shared/error_messages'  #visualizza un parziale che contiene gli errori
+   f.label :name 
+   f.text_field :name
+   f.label :email
+   f.text_field :email
+   f.label :password 
+   f.password_field :password
+   f.label :password_confirmation, "Confirmation"
+   f.password_field :password_confirmation
+   f.submit "Create my account", class: "btn btn-primary"
+ end
+
+ #Output HTML Generato:
+ <form accept-charset="UTF-8" action="/users" class="new_user" id="new_user" method="post">   #quello che conta è action="/users" e method="post"
+ <input name="utf8" type="hidden" value="&#x2713;" />
+ <input name="authenticity_token" type="hidden" value="NNb6+J/j46LcrgYUC60wQ2titMuJQ5lLqyAbnbAUkdo=" />
+ <label for="user_name">Name</label>
+ <input id="user_name" name="user[name]" type="text" />
+ <label for="user_email">Email</label>
+ <input id="user_email" name="user[email]" type="text" />
+ <label for="user_password">Password</label>
+ <input id="user_password" name="user[password]" type="password" />
+ <label for="user_password_confirmation">Confirmation</label>
+ <input id="user_password_confirmation" name="user[password_confirmation]" type="password" />
+ <input class="btn btn-primary" name="commit" type="submit" value="Create my account" />
+ </form>
+
+#Parziale shared/error_messages
+if @user.errors.any?
+  <div id="error_explanation">
+  <div class="alert alert-danger">
+  The form contains pluralize(@user.errors.count, "error") 
+  </div>
+  <ul>
+  @user.errors.full_messages.each do |msg|
+    <li> msg </li>
+  end
+  </ul>
+  </div>
+end
+
+
+#------------------------------------------------------------------------Esempio Integration Test che verifica l'invio di un form
+require 'test_helper'
+class UsersSignupTest < ActionDispatch::IntegrationTest
+  test "invalid signup information" do
+    get signup_path                           #accede alla pagina di registrazione
+    assert_no_difference 'User.count' do      #verifica che non ci siano differenze 
+      post users_path, user: { name: "", email: "user@invalid", password: "foo", password_confirmation: "bar" }
+    end
+    assert_template 'users/new'                #verifica il render di questa vista
+  end
+
+  test "valid signup information" do
+    get signup_path
+    assert_difference 'User.count', 1 do #verifica che dopo il post il risultato sia diverso da 1 (che il post ha dato esito positivo in quanto è stato aggiunto un user)
+      post_via_redirect users_path, user: { name: "Example User", email: "user@example.com", password: "password", password_confirmation: "password" }
+    end
+    assert_template 'users/show'
+    assert_not flash.FILL_IN      #verifica che il flash non sia nil
+  end
+
+end
+
+
+#------------------------------------------------------------------------Esempio Generazione nella vista di un messaggio flash inserito nel Layout (esempio grezzo) 
+ flash.each do |message_type, message| 
+<div class="alert alert-< message_type >">< message ></div>  #se il messaggio è positivo viene generata una classe alert-success per il div Bootstrap supporta success, info, warning e danger
+< end >
+
+#questo è un sistema più elegante
+< content_tag(:div, message, class: "alert alert-#{message_type}") >
+
+
+#-----------------------------------------------------------------------Configuring the application to use SSL in production.
+config/environments/production.rb
+Rails.application.configure do
+  .
+  .
+  .
+  # Force all access to the app over SSL, use Strict-Transport-Security,
+  # and use secure cookies.
+  config.force_ssl = true
+  .
+  . 
+  .
+end
+
+
+
+#----------------------------------------------------------------------Esempio Form Di login (sostituire %> a >)
+<% provide(:title, "Log in") >
+<h1>Log in</h1>
+<div class="row">
+<div class="col-md-6 col-md-offset-3">
+<%= form_for(:session, url: login_path) do |f| >
+  <%= f.label :email >
+  <%= f.email_field :email, class: 'form-control' >
+  <%= f.label :password >
+  <%= f.password_field :password, class: 'form-control' >
+  <%= f.submit "Log in", class: "btn btn-primary" >
+<% end >
+<p>New user? <%= link_to "Sign up now!", signup_path ></p>
+</div>
+</div>
+
+#---------------------Output HTML generatore
+<form accept-charset="UTF-8" action="/login" method="post">
+  <input name="utf8" type="hidden" value="&#x2713;" />
+  <input name="authenticity_token" type="hidden"
+  value="NNb6+J/j46LcrgYUC60wQ2titMuJQ5lLqyAbnbAUkdo=" />
+  <label for="session_email">Email</label>
+  <input class="form-control" id="session_email" name="session[email]" type="text" />
+  <label for="session_password">Password</label>
+  <input id="session_password" name="session[password]" type="password" />
+  <input class="btn btn-primary" name="commit" type="submit" value="Log in" />
+</form>
+
+
+#a differenza del form user qui posso accedere ai parametri in questo modo:
+params[:session][:email]
+params[:session][:password]
+#mentre per il form user che ha un model
+params[:user]
+
+"user" => { "name" => "Foo Bar", "email" => "foo@invalid", "password" => "[FILTERED]", "password_confirmation" => "[FILTERED]" }
+
+private
+  def user_params
+   params.require(:user).permit(:name, :email, :password, :password_confirmation)
+  end
+
+@user = User.new(user_params)
+
+
+
+params = {}                                                             # Define a hash called 'params' (short for 'parameters'). => {}
+params[:user] = { name: "Michael Hartl", email: "mhartl@example.com" }  #=> {:name=>"Michael Hartl", :email=>"mhartl@example.com"}
+params                                                                  #=> {:user=>{:name=>"Michael Hartl", :email=>"mhartl@example.com"}}
+params[:user][:email]                                                   #=> "mhartl@example.com"
+
+#Differentemente in session ho
+
+session:
+email: 'user@example.com'
+password: 'foobar'
+commit: Log in
+action: create
+controller: sessions
+
+{ session: { password: "foobar", email: "user@example.com" } }
+
+params[:session]  # è a sua volta un hash  => { password: "foobar", email: "user@example.com" }
+
+#di conseguenza 
+params[:session][:email]     #email
+params[:session][:password]  #password
+
+#-----------------------------------------------------------------------Controller Session
+class SessionsController < ApplicationController
+
+  def new
+  end
+  
+  def create
+    user = User.find_by(email: params[:session][:email].downcase)   #trova l'utente in base all'email
+    if user && user.authenticate(params[:session][:password])       #se non trova niente user è nil quindi false e poi usa il metodo authenticate reso disponibile nella classe User
+      # Log the user in and redirect to the user's show page.
+    else
+      #flash[:danger] = 'Invalid email/password combination' # Not quite right!  non è giusto qui usare flash perchè rimane sino ad un vero redirect_to
+      flash.now[:danger] = 'Invalid email/password combination' # flash.now è giusto rimane sino alla prossima richiesta
+      render 'new'
+    end
+  end
+  
+  def destroy
+  end
+
+end
+
+#----Problema messaggio flash
+#il messagio flash rimane per un renderizzamento in questo caso fare il render di una vista non è considerato reinderizzare
+#quindi il messaggio rimarebbe per una richiesta in più
+#usare flash.now dopo qualsiasi richiesta
+
+#-------------------esempio struttura utilizzata
+User Password a && b
+nonexistent anything (nil && [anything]) == false
+valid user wrong password (true && false) == false
+valid user right password (true && true) == true
+Table 8.2: Possible results of user && user.authenticate(...).
+
+
+
+#-----------------------------------------------------------------------Esempio Test di Login test/integration/users_login_test.rb
+require 'test_helper'
+
+class UsersLoginTest < ActionDispatch::IntegrationTest
+  test "login with invalid information" do
+    get login_path                                                  #Visita il login path
+    assert_template 'sessions/new'                                  #Verifica che il nuovo sessions form venga visualizzato correttamente.
+    post login_path, session: { email: "", password: "" }           #Richiesta in Post al sessions path con un params hash non valido.   
+    assert_template 'sessions/new'                                  #Verifica che il new sessions form venga re-renderizzato. 
+    assert_not flash.empty?                                         #Verifica la presenza di un messaggio flash.     
+    get root_path                                                   #Visita un’altra pagina (ad esempio la Home page).
+    assert flash.empty?                                             #Verifica che il messaggio flash non compaia sulla nuova pagina.
+  end
+end
+
+
+#per scaricare installazione dielle
+#http://software.dielle.it/Setup3cad.exe

@@ -1,0 +1,340 @@
+//--- Macro Forzatura Regola
+#LETV _TIPO=159   //--- Forza Letto Limbo
+
+// ---Macro di Assegnazione Variabili
+ASSEGNA
+
+#LETV _MAN=999
+
+
+#LET P1=35
+#LET P2=18
+#LET P3=25
+
+#LET PCAS=468
+#LETV TGC=2
+
+
+//------------------------GRUPPO
+#LETV _FA01=$(_A00:1)
+#LETV _FA02=$(_A00:1)
+#LETV _PAN19=M01.001    //---STRUTTURA INTERNA FORZATA BIANCO
+#LETV _PAN18=M01.001    //---STRUTTURA LONGONI FORZATA BIANCO
+
+
+
+#LETS COLGAM1=1|$(.percorso)\foto\ante\$(_PAN20:3)
+#LETS COLGAM2=1|$(.percorso)\foto\ante\$(_PAN20:3)
+#LETS COLMAS=1|$(.percorso)\foto\ante\diva_texture.jpg
+
+
+#IF $(SUPERVISOR)=1
+   #IF $(FINLIST:1)=0
+      #LETV _CAS1=M01.001
+      #LETV _CAS2=M01.001
+      #LETV _PAN5=M01.001
+      #LETV _PAN6=M01.001
+   #ENDIF
+#ELSE
+   #LETV _CAS1=M01.001
+   #LETV _CAS2=M01.001
+   #LETV _PAN5=M01.001
+   #LETV _PAN6=M01.001
+#ENDIF
+
+
+
+//--------------------------CODICI BARRA
+
+
+//#IF $(_TIPOLETMDS:3)=13 | $(_TIPOLETMDS:3)=14 | $(_TIPOLETMDS:3)=15   //---SELEZIONE VARIANTI
+
+#LET SA_LONG=316       //---POSIZIONE IN ALTELLA LONGONI
+#LET SP_LONG=70        //---POSIZIONE PROFONDITA' LONGONI
+#LET H_LONG=70         //---ALTEZZA LONGONI
+#LET L_LONG=70         //---LARGHEZZA LONGONI
+#LET P_LONG=$P-90     //---PROFONDITA LONGONI
+#LET L_PIED=$L-800         //---LARGHEZZA PIEDIERA
+#LET SL_PIED=400        //---SPOSTAMENTO LARGHEZZA TESTIERA
+#LET H_PIED=70         //---LARGHEZZA PIEDIERA
+#LET P_PIED=70         //---PROFONDITA' PIEDIERA
+
+#LET SA_TEST=316      //---SPOSTAMENTO ALTEZZA TESTIERA
+#LET SP_TEST=30       //---SPOSTAMENTO PROFONDITA' TESTIERA
+#LET SL_TEST=0        //---SPOSTAMENTO LARGHEZZA TESTIERA
+#LET H_TEST=$A-304    //---ALTEZZA TESTIERA
+#LET P_TEST=18        //---SPESSORE TESTIERA
+#LET L_TEST=$L-33     //---LARGHEZZA TESTIERA
+
+#LET H_COM=$A-357     //---ALTEZZA COMODINO
+#LET P_COM=280        //---SPESSORE COMODINO
+#LET L_COM=380        //---LARGHEZZA COMODINO
+
+#LET H_GAMB=316       //---ALTEZZA GAMBA
+#LET L_GAMB=35        //---LARGHEZZA GAMBA
+#LET P_GAMB=35        //---PROFONDITA GAMBA
+
+#LET SA_RUOTE=10     //---SPOSTAMENTO RUOTE DA TERRA FRONTALE
+#LET SA_RUOTE2=35    //---SPOSTAMENTO RUOTE DA TERRA FONDO
+
+//#ENDIF
+
+
+#IF $(_TIPOLETMDS:3)=13 | $(_TIPOLETMDS:3)=14 | $(_TIPOLETMDS:3)=15    //---TESTIRA GIROLETTO
+   
+   552,SE=$(_PAN:6)!!E,SA=$(SA_TEST),A=$(H_TEST),SL=33/2,L=$(L_TEST),SP=$(SP_TEST),P=$(P_TEST),X2=NOMAGG,AY=0,CX=_PAN,X3=X/066060006,X7=LAP,gl=^3ds\letti\time\limbo_testiera.3ds,lato=11        //---TESTIERA
+   552,SE=$(_PAN:6)==E,SA=$(SA_TEST),A=$(H_TEST),SL=33/2,L=$(L_TEST),SP=$(SP_TEST),P=$(P_TEST),X2=NOMAGG,AY=0,CX=_PAN,X3=X/066060007,X7=LAP,gl=^3ds\letti\time\limbo_testiera.3ds,lato=11        //---TESTIERA ECOLEGNO
+   
+   552,SE=$(_PAN:6)!!E,SA=$(SA_TEST)+55,A=$(H_COM),SL=9,L=$(L_COM),SP=$(SP_TEST),P=$(P_COM),X2=NOMAGG,AY=0,CX=_PAN,X3=X/066060008,X7=LAP,gl=^3ds\letti\time\limbo_cmdsx.3ds,lato=11        //---COMODINO SX
+   552,SE=$(_PAN:6)==E,SA=$(SA_TEST)+55,A=$(H_COM),SL=9,L=$(L_COM),SP=$(SP_TEST),P=$(P_COM),X2=NOMAGG,AY=0,CX=_PAN,X3=X/066060009,X7=LAP,gl=^3ds\letti\time\limbo_cmdsx.3ds,lato=11        //---COMODINO SX
+   552,SE=$(_PAN:6)!!E,SA=$(SA_TEST)+55,A=$(H_COM),SL=$L-$(L_COM)-9,L=$(L_COM),SP=$(SP_TEST),P=$(P_COM),X2=NOMAGG,AY=0,CX=_PAN,X3=X/066060010,X7=LAP,gl=^3ds\letti\time\limbo_cmddx.3ds,lato=11        //---COMODINO SX
+   552,SE=$(_PAN:6)==E,SA=$(SA_TEST)+55,A=$(H_COM),SL=$L-$(L_COM)-9,L=$(L_COM),SP=$(SP_TEST),P=$(P_COM),X2=NOMAGG,AY=0,CX=_PAN,X3=X/066060011,X7=LAP,gl=^3ds\letti\time\limbo_cmddx.3ds,lato=11        //---COMODINO SX
+   
+   #LETS APPO_PAN=$(_PAN)
+   #LETV _PAN=$(_PAN1)
+   552,SE=$(_PAN:6)!!E,SA=$(SA_LONG),A=$(H_LONG),SL=400,L=$(L_LONG),SP=$(SP_LONG),P=$(P_LONG),X2=NOMAGG,AY=0,CX=_PAN1,X3=X/040210003,X7=PAL              //---LONGONE SX
+   552,SE=$(_PAN:6)!!E,SA=$(SA_LONG),A=$(H_LONG),SL=$L-$(L_LONG)-400,L=$(L_LONG),SP=$(SP_LONG),X2=NOMAGG,P=$(P_LONG),AY=0,CX=_PAN1,X3=X/040210003,X7=PAL   //---LONGONE DX
+   552,SE=$(_PAN:6)==E,SA=$(SA_LONG),A=$(H_LONG),SL=400,L=$(L_LONG),SP=$(SP_LONG),P=$(P_LONG),X2=NOMAGG,AY=0,CX=_PAN1,X3=X/040210004,X7=PAL              //---LONGONE SX ECO
+   552,SE=$(_PAN:6)==E,SA=$(SA_LONG),A=$(H_LONG),SL=$L-$(L_LONG)-400,L=$(L_LONG),SP=$(SP_LONG),P=$(P_LONG),X2=NOMAGG,AY=0,CX=_PAN1,X3=X/040210004,X7=PAL   //---LONGONE DX ECO
+   
+   552,SE=$(_PAN:6)!!E,SA=$(SA_LONG),A=$(H_PIED),SL=$(SL_PIED),L=$(L_PIED),SP=$(SP_LONG)+$(P_LONG),P=$(P_PIED),X2=NOMAGG,AY=0,CX=_PAN1,X3=X/066200001,X7=LAP,DIS=HOPPLAMEN:$(L_PIED);$(P_PIED);30           //---PIEDIERA
+   552,SE=$(_PAN:6)==E,SA=$(SA_LONG),A=$(H_PIED),SL=$(SL_PIED),L=$(L_PIED),SP=$(SP_LONG)+$(P_LONG),P=$(P_PIED),X2=NOMAGG,AY=0,CX=_PAN1,X3=X/066200002,X7=LAP,DIS=HOPPLAMEN:$(L_PIED);$(P_PIED);30           //---PIEDIERA ECO
+   #LETV _PAN=$(APPO_PAN)
+   
+   //----RETE
+   36.1,lato=6,x3=1,SA=$(SA_LONG),A=40,SL=($L-1600)/2,L=1600,SP=40,P=2000,c2=13,c1=90,ay=0,X4=040625030
+   36.1,lato=11,x3=1,SA=$(SA_LONG),A=40,SL=($L-1600)/2,L=1600,SP=$(SP_TEST)+$(P_TEST)+15,P=2000,gl=^3ds\letti\time\TIME_Rete 2000.3ds,c2=13,c1=90,ay=0,X4=nullo
+   
+#ELSEIF $(_TIPOLETMDS:3)=16 | $(_TIPOLETMDS:3)=17 | $(_TIPOLETMDS:3)=18    //---TESTIRA GIROLETTO ECOPELLE
+   
+   #LETS APPO_PAN=$(_PAN)
+   #LETV _PAN=$(_TES)
+   552,SA=$(SA_TEST),A=$(H_TEST),SL=33/2,L=$(L_TEST),SP=$(SP_TEST),P=$(P_TEST),X2=NOMAGG,AY=0,CX=_TES,X3=X/066060012,X7=LAP,gl=^3ds\letti\time\limbo_testiera.3ds,lato=11        //---TESTIERA
+   552,SA=$(SA_TEST)+55,A=$(H_COM),SL=9,L=$(L_COM),SP=$(SP_TEST),P=$(P_COM),X2=NOMAGG,AY=0,CX=_TES,X3=X/066060013,X7=LAP,gl=^3ds\letti\time\limbo_cmdsx.3ds,lato=11        //---COMODINO SX
+   552,SA=$(SA_TEST)+55,A=$(H_COM),SL=$L-$(L_COM)-9,L=$(L_COM),SP=$(SP_TEST),P=$(P_COM),X2=NOMAGG,AY=0,CX=_TES,X3=X/066060014,X7=LAP,gl=^3ds\letti\time\limbo_cmddx.3ds,lato=11        //---COMODINO SX
+   #LETV _PAN=$(APPO_PAN)
+   
+   #LETS APPO_PAN=$(_PAN)
+   #LETV _PAN=$(_PAN1)
+   552,SE=$(_PAN:6)!!E,SA=$(SA_LONG),A=$(H_LONG),SL=400,L=$(L_LONG),SP=$(SP_LONG),P=$(P_LONG),X2=NOMAGG,AY=0,CX=_PAN1,X3=X/040210003,X7=PAL              //---LONGONE SX
+   552,SE=$(_PAN:6)!!E,SA=$(SA_LONG),A=$(H_LONG),SL=$L-$(L_LONG)-400,L=$(L_LONG),SP=$(SP_LONG),X2=NOMAGG,P=$(P_LONG),AY=0,CX=_PAN1,X3=X/040210003,X7=PAL   //---LONGONE DX
+   552,SE=$(_PAN:6)==E,SA=$(SA_LONG),A=$(H_LONG),SL=400,L=$(L_LONG),SP=$(SP_LONG),P=$(P_LONG),X2=NOMAGG,AY=0,CX=_PAN1,X3=X/040210004,X7=PAL              //---LONGONE SX ECO
+   552,SE=$(_PAN:6)==E,SA=$(SA_LONG),A=$(H_LONG),SL=$L-$(L_LONG)-400,L=$(L_LONG),SP=$(SP_LONG),P=$(P_LONG),X2=NOMAGG,AY=0,CX=_PAN1,X3=X/040210004,X7=PAL   //---LONGONE DX ECO
+   
+   552,SE=$(_PAN:6)!!E,SA=$(SA_LONG),A=$(H_PIED),SL=$(SL_PIED),L=$(L_PIED),SP=$(SP_LONG)+$(P_LONG),P=$(P_PIED),X2=NOMAGG,AY=0,CX=_PAN1,X3=X/066200001,X7=LAP,DIS=HOPPLAMEN:$(L_PIED);$(P_PIED);30           //---PIEDIERA
+   552,SE=$(_PAN:6)==E,SA=$(SA_LONG),A=$(H_PIED),SL=$(SL_PIED),L=$(L_PIED),SP=$(SP_LONG)+$(P_LONG),P=$(P_PIED),X2=NOMAGG,AY=0,CX=_PAN1,X3=X/066200002,X7=LAP,DIS=HOPPLAMEN:$(L_PIED);$(P_PIED);30           //---PIEDIERA ECO
+   #LETV _PAN=$(APPO_PAN)
+   
+   //----RETE
+   36.1,lato=6,x3=1,SA=$(SA_LONG),A=40,SL=($L-1600)/2,L=1600,SP=40,P=2000,c2=13,c1=90,ay=0,X4=040625030
+   36.1,lato=11,x3=1,SA=$(SA_LONG),A=40,SL=($L-1600)/2,L=1600,SP=$(SP_TEST)+$(P_TEST)+15,P=2000,gl=^3ds\letti\time\TIME_Rete 2000.3ds,c2=13,c1=90,ay=0,X4=nullo
+   
+   
+#ELSEIF $(_TIPOLETMDS:3)=19 | $(_TIPOLETMDS:3)=20 | $(_TIPOLETMDS:3)=21    //---TESTIRA GIROLETTO ECOPELLE TOTALE
+   
+   #LETS APPO_PAN=$(_PAN)
+   #LETV _PAN=$(_TES)
+   552,SA=$(SA_TEST),A=$(H_TEST),SL=33/2,L=$(L_TEST),SP=$(SP_TEST),P=$(P_TEST),X2=NOMAGG,AY=0,CX=_TES,X3=X/066060012,X7=LAP,gl=^3ds\letti\time\limbo_testiera.3ds,lato=11        //---TESTIERA
+   552,SA=$(SA_TEST)+55,A=$(H_COM),SL=9,L=$(L_COM),SP=$(SP_TEST),P=$(P_COM),X2=NOMAGG,AY=0,CX=_TES,X3=X/066060013,X7=LAP,gl=^3ds\letti\time\limbo_cmdsx.3ds,lato=11              //---COMODINO SX
+   552,SA=$(SA_TEST)+55,A=$(H_COM),SL=$L-$(L_COM)-9,L=$(L_COM),SP=$(SP_TEST),P=$(P_COM),X2=NOMAGG,AY=0,CX=_TES,X3=X/066060014,X7=LAP,gl=^3ds\letti\time\limbo_cmddx.3ds,lato=11  //---COMODINO SX
+   #LETV _PAN=$(APPO_PAN)
+   
+   //---GESTIONE GIROLETTO LIVELLO DI CODICE
+   #LETS APPO_PAN=$(_PAN)
+   #LETV _PAN=$(_PAN18)
+   552,LATO=6,SA=$(SA_LONG),A=$(H_LONG),SL=400,L=$(L_LONG),SP=$(SP_LONG),P=$(P_LONG),X2=NOMAGG,AY=0,CX=0,X3=X/040210003,X7=PAL              //---LONGONE SX
+   552,LATO=6,SA=$(SA_LONG),A=$(H_LONG),SL=$L-$(L_LONG)-400,L=$(L_LONG),SP=$(SP_LONG),X2=NOMAGG,P=$(P_LONG),AY=0,CX=0,X3=X/040210003,X7=PAL   //---LONGONE DX
+   552,LATO=6,SA=$(SA_LONG),A=$(H_PIED),SL=$(SL_PIED),L=$(L_PIED),SP=$(SP_LONG)+$(P_LONG),P=$(P_PIED),X2=NOMAGG,AY=0,CX=0,X3=X/066200001,X7=LAP,DIS=HOPPLAMEN:$(L_PIED);$(P_PIED);30           //---PIEDIERA
+   #LETV _PAN=$(APPO_PAN)
+   
+   //---GESTIONE GIROLETTO LIVELLO DI GRAFICA
+   #LETS APPO_PAN=$(_PAN)
+   #LETV _PAN=$(_TES2)
+   552,SA=$(SA_LONG),A=$(H_LONG),SL=400,L=$(L_LONG),SP=$(SP_LONG),P=$(P_LONG),X2=NOMAGG,AY=0,CX=_TES2,X3=X/X,X7=PAL              //---LONGONE SX
+   552,SA=$(SA_LONG),A=$(H_LONG),SL=$L-$(L_LONG)-400,L=$(L_LONG),SP=$(SP_LONG),X2=NOMAGG,P=$(P_LONG),AY=0,CX=_TES2,X3=X/X,X7=PAL   //---LONGONE DX
+   552,SA=$(SA_LONG),A=$(H_PIED),SL=$(SL_PIED),L=$(L_PIED),SP=$(SP_LONG)+$(P_LONG),P=$(P_PIED),X2=NOMAGG,AY=0,CX=_TES2,X3=X/X,X7=LAP,DIS=HOPPLAMEN:$(L_PIED);$(P_PIED);30           //---PIEDIERA
+   #LETV _PAN=$(APPO_PAN)
+   
+   
+   //---GESTIONE RIVESTIMENTO GIROLETTO
+   #LETS COLTEST=$(_TES2:6)|$(.percorso)\foto\ante\$(_TES2:3)
+   550.5,LATO=6,SL=0,SA=470,SP=40,L=800,A=400,P=40,X4=040141715/X/X/580=$(_TES2:16);TS=$(_TES2:4);_TES=$(_TES2:1)
+   
+   //----RETE
+   36.1,lato=6,x3=1,SA=$(SA_LONG),A=40,SL=($L-1600)/2,L=1600,SP=40,P=2000,c2=13,c1=90,ay=0,X4=040625030
+   36.1,lato=11,x3=1,SA=$(SA_LONG),A=40,SL=($L-1600)/2,L=1600,SP=$(SP_TEST)+$(P_TEST)+15,P=2000,gl=^3ds\letti\time\TIME_Rete 2000.3ds,c2=13,c1=90,ay=0,X4=nullo
+   
+   
+#ENDIF
+
+
+#IF $(_TIPOLETMDS:3)=13 | $(_TIPOLETMDS:3)=16 | $(_TIPOLETMDS:3)=19     //---GAMBE INCLINATE
+   
+   #IF $(_PAN20:1)==M01.001        //---BIANCO
+      
+      #LETV _GAM=$(_PAN20)
+      #LETS X4GAM=$(_GAM:7)/A0=$(_GAM:4);401=$(_GAM:16);_GAM=$(_GAM:1);
+      
+      35.004,SA=0,A=$(H_GAMB),SL=125+260+400,L=160,SP=330+30,P=160,gl=^3ds\letti\time\TIME_Gamba inclinata DX.3ds,c2=1,c1=1,AY=-180,X4=014400700/$(X4GAM)                                         //---GAMBA RETRO SX
+      35.004,SA=0,A=$(H_GAMB),SL=$L-125-160+30-360,L=160,SP=330+30,P=160,gl=^3ds\letti\time\TIME_Gamba inclinata SX.3ds,c2=1,c1=1,AY=-180,X4=014400600/$(X4GAM)                                   //---GAMBA RETRO DX
+      35.004,SA=0,A=$(H_GAMB),SL=125+400,L=160,SP=$P-330,P=160,gl=^3ds\letti\time\TIME_Gamba inclinata SX.3ds,c2=1,c1=1,X4=014400700/$(X4GAM)                                                  //---GAMBA FRONTE SX
+      35.004,SA=0,A=$(H_GAMB),SL=$L-125-160-400,L=160,SP=$P-330,P=160,gl=^3ds\letti\time\TIME_Gamba inclinata DX.3ds,c2=1,c1=1,X4=014400600/$(X4GAM)                                           //---GAMBA FRONTR DX
+      
+   #ELSEIF $(_PAN20:1)==M22.003   //---CROMO
+      
+      35,SA=0,A=$(H_GAMB),SL=125+260+400,L=160,SP=330+30,P=160,gl=^3ds\letti\time\TIME_Gamba inclinata DX.3ds,c2=90,c1=90,AY=-180,X4=014400701                                                //---GAMBA RETRO SX
+      35,SA=0,A=$(H_GAMB),SL=$L-125-160+30-360,L=160,SP=330+30,P=160,gl=^3ds\letti\time\TIME_Gamba inclinata SX.3ds,c2=90,c1=90,AY=-180,X4=014400601                                         //---GAMBA RETRO DX
+      35,SA=0,A=$(H_GAMB),SL=125+400,L=160,SP=$P-330,P=160,gl=^3ds\letti\time\TIME_Gamba inclinata SX.3ds,c2=90,c1=90,X4=014400701                                                        //---GAMBA FRONTE SX
+      35,SA=0,A=$(H_GAMB),SL=$L-125-160-400,L=160,SP=$P-330,P=160,gl=^3ds\letti\time\TIME_Gamba inclinata DX.3ds,c2=90,c1=90,X4=014400601                                                 //---GAMBA FRONTR DX
+      
+   #ENDIF
+   
+   
+#ELSEIF  $(_TIPOLETMDS:3)=14 | $(_TIPOLETMDS:3)=15 | $(_TIPOLETMDS:3)=17 | $(_TIPOLETMDS:3)=18 | $(_TIPOLETMDS:3)=20 | $(_TIPOLETMDS:3)=21    //---GAMBE DRITTR
+   //---GAMBE DRITTE
+   
+   #IF $(_PAN20:1)==M01.001        //---BIANCO
+      
+      #LETV _GAM=$(_PAN20)
+      #LETS X4GAM=$(_GAM:7)/A0=$(_GAM:4);401=$(_GAM:16);_GAM=$(_GAM:1);
+      
+      35.004,SA=0,A=$(H_GAMB),SL=170+400,L=70,SP=310,P=70,gl=^3ds\letti\time\time_gamba_dritta.3ds,c2=1,c1=1,X4=014400800/$(X4GAM)                                         //---GAMBA RETRO SX
+      35.004,SA=0,A=$(H_GAMB),SL=$L-170-70-400,L=70,SP=310,P=70,gl=^3ds\letti\time\time_gamba_dritta.3ds,c2=1,c1=1,X4=014400800/$(X4GAM)                                   //---GAMBA RETRO DX
+      35.004,SA=0,A=$(H_GAMB),SL=170+400,L=70,SP=$p-315,P=70,gl=^3ds\letti\time\time_gamba_dritta.3ds,c2=1,c1=1,X4=014400800/$(X4GAM)                                      //---GAMBA FRONTE SX
+      35.004,SA=0,A=$(H_GAMB),SL=$L-170-70-400,L=70,SP=$p-315,P=70,gl=^3ds\letti\time\time_gamba_dritta.3ds,c2=1,c1=1,X4=014400800/$(X4GAM)                                //---GAMBA FRONTE DX
+      
+   #ELSEIF $(_PAN20:1)==M22.003   //---CROMO
+      
+      35.004,SA=0,A=$(H_GAMB),SL=170+400,L=70,SP=310,P=70,gl=^3ds\letti\time\time_gamba_dritta.3ds,c2=90,c1=90,X4=014400801                                               //---GAMBA RETRO SX
+      35.004,SA=0,A=$(H_GAMB),SL=$L-170-70-400,L=70,SP=310,P=70,gl=^3ds\letti\time\time_gamba_dritta.3ds,c2=90,c1=90,X4=014400801                                         //---GAMBA RETRO DX
+      35.004,SA=0,A=$(H_GAMB),SL=170+400,L=70,SP=$p-315,P=70,gl=^3ds\letti\time\time_gamba_dritta.3ds,c2=90,c1=90,X4=014400801                                            //---GAMBA FRONTE SX
+      35.004,SA=0,A=$(H_GAMB),SL=$L-170-70-400,L=70,SP=$p-315,P=70,gl=^3ds\letti\time\time_gamba_dritta.3ds,c2=90,c1=90,X4=014400801                                      //---GAMBA FRONTE DX
+      
+   #ENDIF
+   
+   
+#ENDIF
+
+
+#IF $(_TIPOLETMDS:3)=15 | $(_TIPOLETMDS:3)=18 | $(_TIPOLETMDS:3)=21   //---GESTIONE CASSETTONI
+   
+   #IF $(APERTO)=1
+      #LET SPAPERTO=250
+   #ELSE
+      #LET SPAPERTO=0
+   #ENDIF
+   
+   #IF $(PRECAS1:0)=1
+      //------------------------------------------------------------------------CASSETTONE SX
+      !MTTRASLA {400-$(SPAPERTO)},0,310,0,0,0
+      #LETV _CAS=$(_CAS1)
+      #LETS CIMBALLO=MTIME
+      #LETS CES_SX=^XCES158$(_CAS:36)M/$(_CAS:7)/B0=$(_CAS:4);_FRO=$(_CAS:35);503=$(_CAS:13);_CAS=$(_CAS:1);413=$(_CAS:12);$(CIMBALLO)/999/00/M/18/$(_CAS:37)
+      #IF $(SPAPERTO)!0
+         #LET APERTO=0
+      #ENDIF
+      517,X4=$(CES_SX),SA=$(SA_RUOTE),A=256,SL=0,L=1534,SP=1534,P=18,AY=90,CX=_CAS1,X2=NOMAGG                    //---FRONTALE CESTONE SX
+      #IF $(SPAPERTO)!0
+         #LET APERTO=1
+      #ENDIF
+      //---STRUTTURA ESTERNA
+      #LETS APPO_PAN=$(_PAN)
+      #LETV _PAN=$(_PAN5)
+      552,SE=$(_PAN:6)!!E,SA=$(SA_RUOTE),A=256,SL=18,L=698,SP=0,P=18,X2=NOMAGG,AY=0,CX=_PAN5,X3=X/065010485,X7=LAP                       //---PANNELLO LATERALE SX ESTERNO
+      552,SE=$(_PAN:6)!!E,SA=$(SA_RUOTE),A=256,SL=18,L=698,SP=1534-18,P=18,X2=NOMAGG,AY=0,CX=_PAN5,X3=X/065010485,X7=LAP                 //---PANNELLO LATERALE DX ESTERNO
+      552,SE=$(_PAN:6)==E,SA=$(SA_RUOTE),A=256,SL=18,L=698,SP=0,P=18,X2=NOMAGG,AY=0,CX=_PAN5,X3=X/065010486,X7=LAP                       //---PANNELLO LATERALE SX ESTERNO ECO
+      552,SE=$(_PAN:6)==E,SA=$(SA_RUOTE),A=256,SL=18,L=698,SP=1534-18,P=18,X2=NOMAGG,AY=0,CX=_PAN5,X3=X/065010486,X7=LAP                 //---PANNELLO LATERALE DX ESTERNO ECO
+      #LETV _PAN=$(APPO_PAN)
+      
+      //---STRUTTURA INTERNA
+      #LETS APPO_PAN=$(_PAN)
+      #LETV _PAN=$(_PAN19)
+      552,LATO=6,SA=$(SA_RUOTE2),A=18,SL=18,L=1403,SP=1403+65.5,P=697,X2=NOMAGG,AY=90,CX=0,X3=X/065010479,X7=LPA             //---FONDO
+      552,SA=$(SA_RUOTE2),A=18,SL=18,L=1403-18,SP=1385+74.5,P=697-18,X2=NOMAGG,AY=90,CX=0,X3=X/X,X7=LPA                      //---FONDO SOLO GRAFICO
+      552,SA=$(SA_RUOTE),A=256,SL=697,L=1498,SP=1498+18,P=18,X2=NOMAGG,AY=90,CX=0,X3=X/065010477,X7=LAP                      //---PANNELLO RETRO
+      552,SA=$(SA_RUOTE),A=224,SL=18,L=680,SP=65.5-9,P=18,X2=NOMAGG,AY=0,CX=0,X3=X/065010481,X7=LAP                          //---PANNELLO LATERALE SX INTERNO
+      552,SA=$(SA_RUOTE),A=224,SL=18,L=680,SP=65.5+1403-9,P=18,X2=NOMAGG,AY=0,CX=0,X3=X/065010481,X7=LAP                     //---PANNELLO LATERALE DX INTERNO
+      552,SA=$(SA_RUOTE2)+18,A=181,SL=18,L=680,SP=65.5-18+1403/2-18/2,P=18,X2=NOMAGG,AY=0,CX=0,X3=X/065010483,X7=LAP         //---PANNELLO CENTRALE INTERNO
+      #LETV _PAN=$(APPO_PAN)
+      !MTRESET
+   #ENDIF
+   
+   #IF $(PRECAS2:0)=1
+      //------------------------------------------------------------------------CASSETTONE DX
+      !MTTRASLA {$L-436-697+$(SPAPERTO)},0,300,0,0,0
+      #LETV _CAS=$(_CAS2)
+      #LETS CIMBALLO=MTIME
+      #LETS CES_DX=^XCES158$(_CAS:36)M/$(_CAS:7)/B0=$(_CAS:4);_FRO=$(_CAS:35);503=$(_CAS:13);_CAS=$(_CAS:1);413=$(_CAS:12);$(CIMBALLO)/999/00/M/18/$(_CAS:37)
+      #IF $(SPAPERTO)!0
+         #LET APERTO=0
+      #ENDIF
+      517,X4=$(CES_DX),SA=$(SA_RUOTE),A=256,SL=697+18,L=1534,SP=1534,P=18,AY=90,CX=_CAS2,X2=NOMAGG                    //---FRONTALE CESTONE SX
+      #IF $(SPAPERTO)!0
+         #LET APERTO=1
+      #ENDIF
+      //---STRUTTURA ESTERNA
+      #LETS APPO_PAN=$(_PAN)
+      #LETV _PAN=$(_PAN6)
+      552,SE=$(_PAN:6)!!E,SA=$(SA_RUOTE),A=256,SL=18,L=698,SP=0,P=18,X2=NOMAGG,AY=0,CX=_PAN6,X3=X/065010485,X7=LAP                       //---PANNELLO LATERALE SX ESTERNO
+      552,SE=$(_PAN:6)!!E,SA=$(SA_RUOTE),A=256,SL=18,L=698,SP=1534-18,P=18,X2=NOMAGG,AY=0,CX=_PAN6,X3=X/065010485,X7=LAP                 //---PANNELLO LATERALE DX ESTERNO
+      552,SE=$(_PAN:6)==E,SA=$(SA_RUOTE),A=256,SL=18,L=698,SP=0,P=18,X2=NOMAGG,AY=0,CX=_PAN6,X3=X/065010486,X7=LAP                       //---PANNELLO LATERALE SX ESTERNO ECO
+      552,SE=$(_PAN:6)==E,SA=$(SA_RUOTE),A=256,SL=18,L=698,SP=1534-18,P=18,X2=NOMAGG,AY=0,CX=_PAN6,X3=X/065010486,X7=LAP                 //---PANNELLO LATERALE DX ESTERNO ECO
+      #LETV _PAN=$(APPO_PAN)
+      
+      //---STRUTTURA INTERNA
+      #LETS APPO_PAN=$(_PAN)
+      #LETV _PAN=$(_PAN19)
+      552,LATO=6,SA=$(SA_RUOTE2),A=18,SL=18+18,L=1403,SP=1403+65.5,P=697,X2=NOMAGG,AY=90,CX=0,X3=X/065010479,X7=LPA             //---FONDO
+      552,SA=$(SA_RUOTE2),A=18,SL=18+18,L=1403-18,SP=1385+74.5,P=697-18,X2=NOMAGG,AY=90,CX=0,X3=X/X,X7=LPA                      //---FONDO SOLO GRAFICO
+      552,SA=$(SA_RUOTE),A=256,SL=18,L=1498,SP=1498+18,P=18,X2=NOMAGG,AY=90,CX=0,X3=X/065010477,X7=LAP                        //---PANNELLO RETRO
+      552,SA=$(SA_RUOTE),A=224,SL=18+18,L=680,SP=65.5-9,P=18,X2=NOMAGG,AY=0,CX=0,X3=X/065010481,X7=LAP                          //---PANNELLO LATERALE SX INTERNO
+      552,SA=$(SA_RUOTE),A=224,SL=18+18,L=680,SP=65.5+1403-9,P=18,X2=NOMAGG,AY=0,CX=0,X3=X/065010481,X7=LAP                     //---PANNELLO LATERALE DX INTERNO
+      552,SA=$(SA_RUOTE2)+18,A=181,SL=18+18,L=680,SP=65.5-18+1403/2-18/2,P=18,X2=NOMAGG,AY=0,CX=0,X3=X/065010483,X7=LAP         //---PANNELLO CENTRALE INTERNO
+      #LETV _PAN=$(APPO_PAN)
+      !MTRESET
+   #ENDIF
+   
+#ENDIF
+
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+260,SA=0,SL=0,SP=0,A=$A,L=$L,P=$P
+
+//--------------GESTIONE MAGGIORAZIONI LACCATURA
+
+
+#IF $(_CODICEMACRO)==MDSM40746 |  $(_CODICEMACRO)==MDSM40747 | $(_CODICEMACRO)==MDSM40748     //LIMBO LACCATO
+   //---MAGG LACCATURA TESTIERA
+   #IF $(_PAN:7)==L                             //---STANDARD/ECOLEGNO
+      //   11,X3=1,L=0,A=0,P=0,X4=0MG000004
+   #ELSEIF $(_PAN:7)==LC | $(_PAN:7)==T         //---CARTELLA/ECOLEGNO
+      11,X3=1,L=0,A=0,P=0,X4=0MG000008
+   #ENDIF
+   
+   //---MAGG LACCATURA GIROLETTO
+   #IF $(_PAN1:7)==L                             //---STANDARD/ECOLEGNO
+      //   11,X3=1,L=0,A=0,P=0,X4=0MG000005
+   #ELSEIF $(_PAN1:7)==LC | $(_PAN1:7)==T         //---CARTELLA/ECOLEGNO
+      11,X3=1,L=0,A=0,P=0,X4=0MG000009
+   #ENDIF
+   
+#ELSEIF $(_CODICEMACRO)==MDSM40749 |  $(_CODICEMACRO)==MDSM40750 | $(_CODICEMACRO)==MDSM40751  //LIMBO TESTIERA ECOPELLE
+   
+   #IF $(_PAN1:7)==E
+      11,X3=1,L=0,A=0,P=0,X4=0DT000008
+   #ELSEIF $(_PAN1:7)==L
+      11,X3=1,L=0,A=0,P=0,X4=0MG000010
+   #ELSEIF $(_PAN1:7)==LC
+      11,X3=1,L=0,A=0,P=0,X4=0MG000011
+   #ENDIF
+   
+   
+#ENDIF
+
+
+//---CORREZIONE CAPPELLA LACCATURA COMO ZEND
+//#IF $(_CODICEMACRO)==MDSM41082
+//   #IF ($[MID;$(_STR1:7); 1;1]==L) & ($[MID;$(_STR2:7); 1;1]==L) & ($[MID;$(_STR3:7); 1;1]==L) & ($[MID;$(_STR4:7); 1;1]==L) & ($[MID;$(_FRO:8); 1;1]==L)
+//      11,X3=1,L=0,A=0,P=0,X4=0DT000004
+//   #ENDIF
+//#ENDIF

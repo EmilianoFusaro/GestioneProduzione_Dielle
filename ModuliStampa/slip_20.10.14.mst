@@ -1,0 +1,156 @@
+{INFO}
+  ORIENTAMENTO (ORIZZONTALE)
+  TABELLA (SLIP)
+  ORDINA(C1,C2,C3,C4,C5)
+  GRUPPOXY (0,292,146,0,200,100)
+  DRAWORDER (XY)
+{/INFO}
+
+{LAYOUT}
+  
+
+{/LAYOUT}
+
+{RECORD}
+ //dimensioni boxcontenitore L H , dimensioni img interna al contenitore L H, posizione x , y  
+ IMMAGINE (110,110,105,105,88,7) "k:/evento/dielle/foto/flavio/#{riga.numero}.jpg" (riga.percorso=="DIELLE")
+ ## riga.eti.to_s.rjust(4,"0")  formatta il numero con 4 "0" Es:0001
+ 
+ ##ATTENZIONE QUESTE 2 RIGHE NON FANNO STAMPARE CARICHI 3CAD (COMMENTARE O SOSTITUIRE)
+ IMMAGINE (110,110,105,105,88,7) "K:/eCadPro/_ecadpro/EtiBox/#{riga.numero}_#{riga.eti.to_s.rjust(4,"0")}.jpg" (riga.percorso=="DIELLEEV")
+ IMMAGINE (110,110,105,105,88,7) "//SRV-CAD/SLIP_GIF/#{riga.pcod}.jpg" (File::exists?("//SRV-CAD/SLIP_GIF/#{riga.pcod}.jpg"))==true and (riga.percorso=="DIELLEEV")
+ 
+ TESTO (73,47,8,G) "#{riga.tipoelaborazione} #{riga.script}"
+ ##TESTO (73,47,8,G) "#{riga.script}"
+
+ LINEA (1,5,141,5)
+ LINEA (1,5,1,80)
+ LINEA (141,5,141,97)
+ LINEA (1,97,141,97)
+  
+ LINEA (1,15,71,15)
+ LINEA (1,80,71,80)
+ LINEA (71,5,71,80)
+ LINEA (21,5,21,15)
+ LINEA (51,5,51,15)
+  
+ #ENV['USERNAME'] Utente Windows
+ #ENV['USER'] Utente Unix
+
+ //TESTO (2,4,6,N) "#{ENV['USERNAME']} #{Time.now.day}/#{Time.now.month}/#{Time.now.year} #{Time.now.hour}:#{Time.now.min}"
+ TESTO (2,4,6,N) "#{ENV['USERNAME']} #{Time.now.strftime('%d-%m-%Y %H:%M:%S')}"
+ TESTO (2,8,6,N) "CARICO"
+ TESTO (22,8,6,N) "NR.ORDINE-NR.COLLO"
+ TESTO (52,8,6) "MATRICOLA #{riga.ciclo}"
+  
+ TESTO (2,13,14,G) "#{riga.carico}"
+ TESTO (22,13,14,G) "#{riga.numero}-#{riga.eti}"
+ TESTO (52,13,14,G) "#{riga.matricola}"
+
+ LINEA (71,68,141,68,F,T)
+  
+ #TESTO (73,54,9,G) "#{riga.nota1}" #non utiliazzata
+ #TESTO (73,59,9,G) "#{riga.nota2}" #non utilizzata
+  
+ #linee tra padre e figlio
+ LINEA (1,42,71,42,F,T)
+ LINEA (71,48,141,48,F,T)
+
+ #linee orizzontali x Padre
+ LINEA (1,68,71,68,F,T)
+ LINEA (1,72,71,72,F,T)
+ LINEA (1,76,71,76,F,T)
+ LINEA (36,68,36,80,F,T)
+
+#linee orizzontali x Figlio
+ LINEA (1,30,71,30,F,T)
+ LINEA (1,34,71,34,F,T)
+ LINEA (1,38,71,38,F,T)
+ LINEA (36,30,36,38,F,T)
+
+
+ LINEA (21,15,21,20,F,T)
+ LINEA (21,38,21,42,F,T)
+ LINEA (1,20,71,20,F,T)
+ ###LINEA (1,53,71,53,F,T)
+
+  
+ ####CONDIZIONATESTO (73,72,9) "#{riga.dc1}" $ (riga.c1!="1503" and riga.c1!="1580")
+ ####CONDIZIONATESTO (73,77,9) "#{riga.dc2}" $ (riga.c2!="1503" and riga.c2!="1580")
+ ####CONDIZIONATESTO (73,82,9) "#{riga.dc3}" $ (riga.c3!="1503" and riga.c3!="1580")
+ ####CONDIZIONATESTO (73,87,9) "#{riga.dc4}" $ (riga.c4!="1503" and riga.c4!="1580")
+ ####CONDIZIONATESTO (73,92,9) "#{riga.dc5}" $ (riga.c5!="1503" and riga.c5!="1580")
+ ####CONDIZIONATESTO (73,96,9) "#{riga.dc6}" $ (riga.c6!="1503" and riga.c6!="1580")
+
+ TESTO (73,72,9) "#{riga.dc1}"
+ TESTO (73,77,9) "#{riga.dc2}"
+ TESTO (73,82,9) "#{riga.dc3}"
+ TESTO (73,87,9) "#{riga.dc4}"
+ TESTO (73,92,9) "#{riga.dc5}"
+ TESTO (73,96,9) "#{riga.dc6}"
+  
+ TESTO (2,71,9,N) "#{riga.pv1}"
+ TESTO (37,71,9,N) "#{riga.pv2}"
+ TESTO (2,75,9,N) "#{riga.pv3}"
+ TESTO (2,79,9,N) "#{riga.pv4}"
+ TESTO (37,79,9,N) "#{riga.pv5} #{riga.fm}"
+ //TESTO (37,79,9,N) "#{riga.pv5}"
+ 
+ #Varianti Figlio
+ TESTO (2,33,9,N) "#{riga.v1}"
+ TESTO (37,33,9,N) "#{riga.v2}"
+ TESTO (2,37,9,N) "#{riga.v3}"
+ TESTO (37,37,9,N) "#{riga.v4}"
+ ##TESTO (2,41,9,N) "#{riga.v5}"  Al Momento Nascosta
+ ##TESTO (37,41,9,N) "#{riga.v6} #{riga.fm}"
+ TESTO (37,41,9,N) "#{riga.v6}"
+  
+  
+ TESTO (2,19,9) "#{riga.codice}"
+ 
+ TXTBOXED (2,21,200,40,8,N) "#{riga.descrizione}#{riga.desc2}"
+ ##{DESC3}"
+ 
+ 
+ //TESTO (22,19,11,G) "DIM:#{riga.rl.to_i}x#{riga.ra.to_i}x#{riga.rp.to_i} QTA:#{riga.qta.to_i}"
+ CONDIZIONATESTO (22,19,11,G) "DIM:#{riga.rl.to_i}x#{riga.ra.to_i}x#{riga.rp.to_i} #{"QTA:" + riga.qta.to_i.to_s + "MT" if (riga.qta.to_i > 1 and riga.descrizione.include? "MQ") }" $ riga.tipoelaborazione=="Logy"
+ CONDIZIONATESTO (22,19,11,G) "DIM:#{riga.rl.to_i}x#{riga.ra.to_i}x#{riga.rp.to_i} #{"QTA:" + riga.qta.to_i.to_s if (riga.qta.to_i > 1 and not riga.descrizione.include? "MQ") }" $ riga.tipoelaborazione=="Logy"
+ CONDIZIONATESTO (22,19,11,G) "PRELEVA:#{riga.rl.to_i}x#{riga.ra.to_i}x#{riga.rp.to_i} #{"QTA:" + riga.qta.to_i.to_s + "MT" if (riga.qta.to_i > 1 and riga.descrizione.include? "MQ") }" $ riga.tipoelaborazione=="Union"
+ CONDIZIONATESTO (22,19,11,G) "PRELEVA:#{riga.rl.to_i}x#{riga.ra.to_i}x#{riga.rp.to_i} #{"QTA:" + riga.qta.to_i.to_s if (riga.qta.to_i > 1 and not riga.descrizione.include? "MQ") }" $ riga.tipoelaborazione=="Union"
+
+ //TESTO (22,19,11,G) "DIM:#{riga.rl.to_i}x#{riga.ra.to_i}x#{riga.rp.to_i} #{"QTA:" + riga.qta.to_i.to_s + "MT" if (riga.qta.to_i > 1 and riga.descrizione.include? "MQ") }"
+ //TESTO (22,19,11,G) "DIM:#{riga.rl.to_i}x#{riga.ra.to_i}x#{riga.rp.to_i} #{"QTA:" + riga.qta.to_i.to_s if (riga.qta.to_i > 1 and not riga.descrizione.include? "MQ") }"
+ 
+ 
+ 
+ #codice padre
+ TESTO (2,41.5,9) "#{riga.pcod}"
+ #descrizione padre
+ TXTBOXED (2,43,200,40,8,N) "#{riga.pdes} #{riga.nota1.gsub('_','')} #{riga.nota2.gsub('_','')} #{riga.nota3.gsub('_','')} #{riga.nota4.gsub('_','')} #{riga.nota5.gsub('_','')}"
+ "#{DESC2}#{DESC3}"
+ 
+ //TESTO (22,52,11,G) "DIM:#{riga.pl.to_i}x#{riga.pa.to_i}x#{riga.pp.to_i} QTA:#{riga.qta.to_i}"
+ #dimensioni padre
+ TESTO (22,41.5,11,G) "DIM:#{riga.pl.to_i}x#{riga.pa.to_i}x#{riga.pp.to_i} #{"QTA:" + riga.qta.to_i.to_s + "MT" if (riga.qta.to_i > 1 and riga.descrizione.include? "MQ") }"
+ TESTO (22,41.5,11,G) "DIM:#{riga.pl.to_i}x#{riga.pa.to_i}x#{riga.pp.to_i} #{"QTA:" + riga.qta.to_i.to_s if (riga.qta.to_i > 1 and not riga.descrizione.include? "MQ") }"
+ 
+ 
+  
+ ###BARCODE39 (5,81,250,40) "#{riga.barcode}"
+ #originale
+ ###BARCODE39 (2,81,190,40) "#{riga.barcode}" 
+ BARCODE39 (1,81,198,41) "#{riga.barcode}"
+ BARCODE39 (80,49,250,20) "#{riga.pxlavdx.gsub('P_','')}"  riga.pxlavdx.to_s.include? 'P_'
+ BARCODE39 (80,58,250,20) "#{riga.pxlavsx.gsub('P_','')}" riga.pxlavsx.to_s.include? 'P_'
+
+{/RECORD}
+
+{MODIFICA_ETI}
+#TESTO (1,68,9,V)  <PV1>
+#TESTO (37,68,9,V) <PV2>
+#TESTO (1,72,9,V)  <PV3>
+//TESTO (37,72,9,V) <PV4>
+#TESTO (1,76,10,V) <PV4>
+#TESTO (37,76,9,V) <PV5>
+//TESTO (37,76,9,V) <PV6>
+{/MODIFICA_ETI}

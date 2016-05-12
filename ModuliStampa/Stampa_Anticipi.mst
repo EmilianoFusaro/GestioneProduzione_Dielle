@@ -1,0 +1,93 @@
+<SQL>
+   "Select Anticipo,Count(Qta) As Qta,Codart,Des,Diml,Dima,Dimp,
+	dbo.DescrizioneVarianti(dbo.DAU_VariantiDiverseTestata(dbo.dielle_puliscivarianti([var]),''),'',2) as DesVar,
+	(Case When CHARINDEX('X', FM)>0 or FM='FM' Then 'FM' Else '' End) as FM,
+	Note1,Note2,Note3,Note4,Note5 From Lista_Anticipi
+	Where numero=#{numero} 
+	Group by Anticipo,Qta,Codart,Des,Diml,Dima,Dimp,dbo.DescrizioneVarianti(dbo.DAU_VariantiDiverseTestata(dbo.dielle_puliscivarianti([var]),''),'',2),fm,Note1,Note2,Note3,Note4,Note5
+	Order By Anticipo "
+</SQL>
+
+  //--- STAMPA NON RAGGRUPPATA
+  //--- Select Anticipo,Qta,Codart,Des,Diml,Dima,Dimp,
+  //--- dbo.DescrizioneVarianti(dbo.DAU_VariantiDiverseTestata(dbo.dielle_puliscivarianti([var]),''),'',2) as DesVar,
+  //--- (Case When CHARINDEX('X', FM)>0 or FM='FM' Then 'FM' Else '' End) as FM,
+  //--- Note1,Note2,Note3,Note4,Note5 From Lista_Anticipi
+  //--- Where numero=#{numero} Order By Anticipo
+ 
+ <DIVIDI>
+ anticipo
+ </DIVIDI>
+ 
+<TESTA>
+  ##----TESTO (2,3,9,G) "Anticipo #{filtro_reparto}"
+  TESTO (250,3.5,7,C) "Stampa_Anticipo.mst"
+  TESTO (3,9,12,G) "Qta"
+  TESTO (12,9,12,G) "Cod"
+  TESTO (32,9,12,G) "Descrizione"
+  TESTO (162,9,12,G) "L"
+  TESTO (174,9,12,G) "A"
+  TESTO (186,9,12,G) "P"
+  TESTO (198,9,8,G) "CHK"
+  //Testata Principale     (X,Y,  DimX , DimY)
+  //qta  
+  RETTANGOLO (1,5,10,5) 
+  //codice
+  RETTANGOLO (11,5,20,5) 
+  //Descrizione
+  RETTANGOLO (31,5,130,5) 
+  //diml  
+  RETTANGOLO (161,5,12,5) 
+  //dima
+  RETTANGOLO (173,5,12,5)
+  //dimp
+  RETTANGOLO (185,5,12,5) 
+  //ccheck
+  RETTANGOLO (197,5,8,5)
+  ##TESTO (190,18,8,N) "ordine: #{rigax[:numero] if defined? rigax}" 
+  TESTO (5,3.5,14,G) "ORDINE:#{numero} - ANTICIPO: #{rigax[:anticipo].to_s} #{Time.now.strftime('%d-%m-%Y %H:%M:%S')}"  
+</TESTA>
+
+
+<RECORD>  
+  //Rettangolo Principlae
+  //qta  
+  RETTANGOLO (1,10,10,15)              
+  //cod
+  RETTANGOLO (11,10,20,15)
+  //Descrizione
+  RETTANGOLO (31,10,130,15)            
+  //diml
+  RETTANGOLO (161,10,12,15)          
+  //dima
+  RETTANGOLO (173,10,12,15) 
+  //dimp
+  RETTANGOLO (185,10,12,15) 
+  //ccheck
+  RETTANGOLO (197,10,8,15) 
+  RETTANGOLO (199.5,16,3,3) 
+
+  TESTO (5,17,12,G) "#{rigax[:qta].to_i}"
+  TESTO (3.5,21,12,G)  "#{rigax[:fm]}"
+  TESTO (12,18,10,G) "#{rigax[:codart]}"
+  TESTO (32,15,10,N) "#{rigax[:des]}"[0,61]
+  TESTO (32,19,10,N) "#{rigax[:desvar]}"[0,75]
+  TESTO (32,23,10,N) "#{rigax[:note1]}#{rigax[:note2]}#{rigax[:note3]}#{rigax[:note4]}#{rigax[:note5]}"[0,61].gsub('_','')
+  ##TESTO (32,18,7,N) "#{rigax[:pv1]}, #{rigax[:pv2]}, #{rigax[:pv3]}, #{rigax[:pv4]} "
+  TESTO (162,19,12,N) "#{rigax[:diml].to_i}"
+  TESTO (175,19,12,N) "#{rigax[:dima].to_i}"
+  TESTO (186,19,12,N) "#{rigax[:dimp].to_i}"
+</RECORD>
+
+
+
+
+
+
+
+
+
+
+
+
+
